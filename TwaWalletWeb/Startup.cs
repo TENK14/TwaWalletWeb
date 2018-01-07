@@ -19,7 +19,7 @@ namespace TwaWalletWeb
 {
     public class Startup
     {
-        //public static IConfigurationRoot Configuration { get; set; }
+        // TODO: https://www.tutorialspoint.com/asp.net_core/asp.net_core_setup_mvc.htm
         public IConfiguration Configuration { get; set; }
 
         public Startup()
