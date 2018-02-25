@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwaWalletWeb", "TwaWalletWeb\TwaWalletWeb.csproj", "{CF80AB6A-1913-4019-BB3B-8D4B3F69377E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{45907A27-1F96-472D-A3A3-5EFDACD22EEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entity", "Entity\Entity.csproj", "{29DCEFCF-AF18-4A28-A71A-4A7BEA3D3D8B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Web\Web.csproj", "{213A8738-A7B8-46BD-8D2F-3EA9247D2CFF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +15,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CF80AB6A-1913-4019-BB3B-8D4B3F69377E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CF80AB6A-1913-4019-BB3B-8D4B3F69377E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CF80AB6A-1913-4019-BB3B-8D4B3F69377E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CF80AB6A-1913-4019-BB3B-8D4B3F69377E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45907A27-1F96-472D-A3A3-5EFDACD22EEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45907A27-1F96-472D-A3A3-5EFDACD22EEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45907A27-1F96-472D-A3A3-5EFDACD22EEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45907A27-1F96-472D-A3A3-5EFDACD22EEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29DCEFCF-AF18-4A28-A71A-4A7BEA3D3D8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29DCEFCF-AF18-4A28-A71A-4A7BEA3D3D8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29DCEFCF-AF18-4A28-A71A-4A7BEA3D3D8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29DCEFCF-AF18-4A28-A71A-4A7BEA3D3D8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{213A8738-A7B8-46BD-8D2F-3EA9247D2CFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{213A8738-A7B8-46BD-8D2F-3EA9247D2CFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{213A8738-A7B8-46BD-8D2F-3EA9247D2CFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{213A8738-A7B8-46BD-8D2F-3EA9247D2CFF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
