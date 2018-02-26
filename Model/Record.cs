@@ -14,7 +14,7 @@ namespace TwaWallet.Model
         public int Id { get; set; }
         [Required]
         public float Cost { get; set; }
-        [Required]
+        
         public string Description { get; set; }
         /// <summary>
         /// ForingKey
@@ -22,8 +22,9 @@ namespace TwaWallet.Model
         [Required]
         public int CategoryId { get; set; }
         public Category Category { get; set; }
+        [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; } = DateTime.Now;
-        public int Warranty { get; set; }
+        public int Warranty { get; set; } = 0;
         /// <summary>
         /// ForingKey
         /// </summary>

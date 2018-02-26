@@ -17,19 +17,14 @@ namespace TwaWallet.Entity
         static TwaWalletDbContext()
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<TwaWalletDbContext, Configuration>());
+            //Database.SetInitializer<TwaWalletDbContext>(new TwaWalletDbInitializer());
         }
 
         public TwaWalletDbContext() : base("name=DefaultConnectionString")
         {
             this.Configuration.AutoDetectChangesEnabled = AutoDetectChangesEnabled;
+
         }
-
-        //public DbSet<User> Users { get; set; }
-
-        //protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-        //}
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -37,8 +32,20 @@ namespace TwaWallet.Entity
 
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.Configurations.AddFromAssembly(this.GetType().Assembly);
-            modelBuilder.RegisterModelFromAssembly(typeof(User).Assembly);
+            // TODO: Havit featura - zjisti, jak pak pracuji s DB, kdyz nejsou DbSety
+            //modelBuilder.RegisterModelFromAssembly(typeof(User).Assembly); 
         }
 
+        public System.Data.Entity.DbSet<TwaWallet.Model.Category> Categories { get; set; }
+
+        public System.Data.Entity.DbSet<TwaWallet.Model.Interval> Intervals { get; set; }
+
+        public System.Data.Entity.DbSet<TwaWallet.Model.PaymentType> PaymentTypes { get; set; }
+
+        public System.Data.Entity.DbSet<TwaWallet.Model.RecurringPayment> RecurringPayments { get; set; }
+
+        public System.Data.Entity.DbSet<TwaWallet.Model.User> Users { get; set; }
+
+        public System.Data.Entity.DbSet<TwaWallet.Model.Record> Records { get; set; }
     }
 }

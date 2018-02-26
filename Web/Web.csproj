@@ -148,8 +148,12 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IntervalController.cs" />
+    <Compile Include="Controllers\PaymentTypeController.cs" />
     <Compile Include="Controllers\RecordController.cs" />
+    <Compile Include="Controllers\RecurringPaymentController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -192,7 +196,31 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Record\Random.cshtml" />
+    <Content Include="Views\Category\Create.cshtml" />
+    <Content Include="Views\Category\Delete.cshtml" />
+    <Content Include="Views\Category\Details.cshtml" />
+    <Content Include="Views\Category\Edit.cshtml" />
+    <Content Include="Views\Category\Index.cshtml" />
+    <Content Include="Views\Interval\Create.cshtml" />
+    <Content Include="Views\Interval\Delete.cshtml" />
+    <Content Include="Views\Interval\Details.cshtml" />
+    <Content Include="Views\Interval\Edit.cshtml" />
+    <Content Include="Views\Interval\Index.cshtml" />
+    <Content Include="Views\PaymentType\Create.cshtml" />
+    <Content Include="Views\PaymentType\Delete.cshtml" />
+    <Content Include="Views\PaymentType\Details.cshtml" />
+    <Content Include="Views\PaymentType\Edit.cshtml" />
+    <Content Include="Views\PaymentType\Index.cshtml" />
+    <Content Include="Views\RecurringPayment\Create.cshtml" />
+    <Content Include="Views\RecurringPayment\Delete.cshtml" />
+    <Content Include="Views\RecurringPayment\Details.cshtml" />
+    <Content Include="Views\RecurringPayment\Edit.cshtml" />
+    <Content Include="Views\RecurringPayment\Index.cshtml" />
+    <Content Include="Views\Record\Create.cshtml" />
+    <Content Include="Views\Record\Delete.cshtml" />
+    <Content Include="Views\Record\Details.cshtml" />
+    <Content Include="Views\Record\Edit.cshtml" />
+    <Content Include="Views\Record\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -211,6 +239,10 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Entity\Entity.csproj">
+      <Project>{29dcefcf-af18-4a28-a71a-4a7bea3d3d8b}</Project>
+      <Name>Entity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{45907a27-1f96-472d-a3a3-5efdacd22eea}</Project>
       <Name>Model</Name>

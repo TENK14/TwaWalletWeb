@@ -1,33 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Data.Entity.Migrations;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TwaWallet.Entity.Migrations;
 using TwaWallet.Model;
 
-namespace TwaWallet.Entity.Migrations
+namespace TwaWallet.Entity
 {
-    internal sealed class Configuration : DbMigrationsConfiguration<TwaWalletDbContext>
+    //public class TwaWalletDbInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<TwaWalletDbContext>
+    public class TwaWalletDbInitializer : System.Data.Entity.CreateDatabaseIfNotExists<TwaWalletDbContext>
+    //public class TwaWalletDbInitializer : System.Data.Entity.MigrateDatabaseToLatestVersion<TwaWalletDbContext, Configuration>
     {
-        private readonly bool isInitialCreate;
-        public Configuration()
-        {
-            AutomaticMigrationDataLossAllowed = false;
-            AutomaticMigrationsEnabled = false;
-
-            // http://blog.evizija.si/entity-framework-code-first-migrations/
-            var migrator = new DbMigrator(this);
-            isInitialCreate = migrator.GetPendingMigrations().Any(x => x.Contains("Init"));
-        }
-
         protected override void Seed(TwaWalletDbContext context)
         {
-            // nop
             /**/
-            //if (context.Database.Exists())
-            if (!isInitialCreate)
-            {
-                return;
-            }
-
             var categories = new List<Category>
             {
                 new Category { Description = "Obědy", IsDefault = true },
@@ -70,6 +57,6 @@ namespace TwaWallet.Entity.Migrations
             intervals.ForEach(i => context.Intervals.Add(i));
             context.SaveChanges();
             /**/
-        }
+        }        
     }
 }
