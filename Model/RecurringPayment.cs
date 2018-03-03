@@ -7,26 +7,26 @@ using System.Threading.Tasks;
 
 namespace TwaWallet.Model
 {
-    public class RecurringPayment : IEntity
+    public class RecurringPayment : BaseEntity, IEntity
     {
         private const string TAG = "X:" + nameof(RecurringPayment);
 
-        public int Id { get; set; }
+        //public int Id { get; set; }
         [Required]
         public string Description { get; set; }
         [Required]
-        public int CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
         public Category Category { get; set; }
         [Required]
-        public int PaymentTypeId { get; set; }
+        public Guid PaymentTypeId { get; set; }
         public PaymentType PaymentType { get; set; }
         [Required]
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public Guid LoginAccountId { get; set; }
+        public LoginAccount LoginAccount { get; set; }
         [Required]
         public float Cost { get; set; }
         [Required]
-        public int IntervalId { get; set; }
+        public Guid IntervalId { get; set; }
         /// <summary>
         /// YYMMDD
         /// </summary>
@@ -68,7 +68,7 @@ namespace TwaWallet.Model
                     + $"{nameof(Cost)}: {Cost}, \r"
                     + $"{ nameof(CategoryId)}: {CategoryId}, \r"
                     + $"{ nameof(Warranty)}: {Warranty}, \r"
-                    + $"{ nameof(UserId)}: {UserId}, \r"
+                    + $"{ nameof(LoginAccountId)}: {LoginAccountId}, \r"
                     + $"{ nameof(PaymentTypeId)}: {PaymentTypeId}, \r"
                     + $"{ nameof(Earnings)}: {Earnings}, \r"
                     + $"{ nameof(DateCreated)}: {DateCreated.ToString(dateFormat)}\r"

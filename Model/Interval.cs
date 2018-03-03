@@ -10,11 +10,11 @@ namespace TwaWallet.Model
     /// <summary>
     /// Slouží pro pravidelné platby
     /// </summary>
-    public class Interval : IEntity
+    public class Interval : BaseEntity,IEntity
     {
         private const string TAG = "X:" + nameof(Interval);
 
-        public int Id { get; set; }
+        //public int Id { get; set; }
         [Required]
         public string Description { get; set; }
         public bool IsDefault { get; set; } = false;

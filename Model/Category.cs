@@ -10,11 +10,11 @@ namespace TwaWallet.Model
     /// <summary>
     /// Slouží za účelem kategorizace jednotlivých položek
     /// </summary>
-    public class Category : IEntity
+    public class Category : BaseEntity, IEntity
     {
         private const string TAG = "X:" + nameof(Category);
 
-        public int Id { get; set; }
+        //public int Id { get; set; }
         [Required]
         public string Description { get; set; }
         public bool IsDefault { get; set; } = false;

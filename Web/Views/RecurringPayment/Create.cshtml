@@ -40,10 +40,38 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.UserId, "UserId", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.LoginAccountId, "LoginAccountId", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("UserId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
+                @Html.LabelFor(model => model.CategoryId, "CategoryId", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.DropDownList("CategoryId", null, htmlAttributes: new { @class = "form-control" });
+
+
+#line default
+#line hidden
+
+#line 12 "C:\LoginAccounts\tomas\source\repos\TwaWalletWeb\Web\Views\RecurringPayment\Create.cshtml"
+                __o = Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" });
+
+
+#line default
+#line hidden
+
+#line 13 "C:\LoginAccounts\tomas\source\repos\TwaWalletWeb\Web\Views\RecurringPayment\Create.cshtml"
+                __o = Html.LabelFor(model => model.PaymentTypeId, "PaymentTypeId", htmlAttributes: new { @class = "control-label col-md-2" });
+
+
+#line default
+#line hidden
+
+#line 14 "C:\LoginAccounts\tomas\source\repos\TwaWalletWeb\Web\Views\RecurringPayment\Create.cshtml"
+                __o = Html.DropDownList("PaymentTypeId", null, htmlAttributes: new { @class = "form-control" });
+
+
+#line default
+#line hidden
+
+#line 15 "C:\LoginAccounts\tomas\source\repos\TwaWalletWeb\Web\Views\RecurringPayment\Create.cshtml"
+                __o = Html.ValidationMessageFor(model => model.PaymentTypeId, "", new { @class = "text-danger" })
             </div>
         </div>
 

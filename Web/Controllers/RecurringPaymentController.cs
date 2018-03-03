@@ -18,18 +18,18 @@ namespace TwaWallet.Web.Controllers
         // GET: RecurringPayment
         public ActionResult Index()
         {
-            var recurringPayments = db.RecurringPayments.Include(r => r.Category).Include(r => r.Interval).Include(r => r.PaymentType).Include(r => r.User);
+            var recurringPayments = db.RecurringPayments.Include(r => r.Category).Include(r => r.Interval).Include(r => r.PaymentType).Include(r => r.LoginAccount);
             return View(recurringPayments.ToList());
         }
 
         // GET: RecurringPayment/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            RecurringPayment recurringPayment = db.RecurringPayments.Find(id);
+            RecurringPayment recurringPayment = db.RecurringPayments.Include(r => r.Category).Include(r => r.Interval).Include(r => r.PaymentType).Include(r => r.LoginAccount).Single(r => r.Id == id);
             if (recurringPayment == null)
             {
                 return HttpNotFound();
@@ -43,7 +43,7 @@ namespace TwaWallet.Web.Controllers
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Description");
             ViewBag.IntervalId = new SelectList(db.Intervals, "Id", "Description");
             ViewBag.PaymentTypeId = new SelectList(db.PaymentTypes, "Id", "Description");
-            ViewBag.UserId = new SelectList(db.Users, "Id", "Name");
+            ViewBag.UserId = new SelectList(db.LoginAccounts, "Id", "Username");
             return View();
         }
 
@@ -64,18 +64,18 @@ namespace TwaWallet.Web.Controllers
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Description", recurringPayment.CategoryId);
             ViewBag.IntervalId = new SelectList(db.Intervals, "Id", "Description", recurringPayment.IntervalId);
             ViewBag.PaymentTypeId = new SelectList(db.PaymentTypes, "Id", "Description", recurringPayment.PaymentTypeId);
-            ViewBag.UserId = new SelectList(db.Users, "Id", "Name", recurringPayment.UserId);
+            ViewBag.UserId = new SelectList(db.LoginAccounts, "Id", "Username", recurringPayment.LoginAccountId);
             return View(recurringPayment);
         }
 
         // GET: RecurringPayment/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            RecurringPayment recurringPayment = db.RecurringPayments.Find(id);
+            RecurringPayment recurringPayment = db.RecurringPayments.Include(r => r.Category).Include(r => r.Interval).Include(r => r.PaymentType).Include(r => r.LoginAccount).Single(r => r.Id == id);
             if (recurringPayment == null)
             {
                 return HttpNotFound();
@@ -83,7 +83,7 @@ namespace TwaWallet.Web.Controllers
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Description", recurringPayment.CategoryId);
             ViewBag.IntervalId = new SelectList(db.Intervals, "Id", "Description", recurringPayment.IntervalId);
             ViewBag.PaymentTypeId = new SelectList(db.PaymentTypes, "Id", "Description", recurringPayment.PaymentTypeId);
-            ViewBag.UserId = new SelectList(db.Users, "Id", "Name", recurringPayment.UserId);
+            ViewBag.UserId = new SelectList(db.LoginAccounts, "Id", "Username", recurringPayment.LoginAccountId);
             return View(recurringPayment);
         }
 
@@ -103,18 +103,18 @@ namespace TwaWallet.Web.Controllers
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Description", recurringPayment.CategoryId);
             ViewBag.IntervalId = new SelectList(db.Intervals, "Id", "Description", recurringPayment.IntervalId);
             ViewBag.PaymentTypeId = new SelectList(db.PaymentTypes, "Id", "Description", recurringPayment.PaymentTypeId);
-            ViewBag.UserId = new SelectList(db.Users, "Id", "Name", recurringPayment.UserId);
+            ViewBag.UserId = new SelectList(db.LoginAccounts, "Id", "Username", recurringPayment.LoginAccountId);
             return View(recurringPayment);
         }
 
         // GET: RecurringPayment/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            RecurringPayment recurringPayment = db.RecurringPayments.Find(id);
+            RecurringPayment recurringPayment = db.RecurringPayments.Include(r => r.Category).Include(r => r.Interval).Include(r => r.PaymentType).Include(r => r.LoginAccount).Single(r => r.Id == id);
             if (recurringPayment == null)
             {
                 return HttpNotFound();
@@ -125,7 +125,7 @@ namespace TwaWallet.Web.Controllers
         // POST: RecurringPayment/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(Guid id)
         {
             RecurringPayment recurringPayment = db.RecurringPayments.Find(id);
             db.RecurringPayments.Remove(recurringPayment);

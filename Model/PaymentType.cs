@@ -10,11 +10,11 @@ namespace TwaWallet.Model
     /// <summary>
     /// Informace o typu platby (např. hotovostí nebo kartou)
     /// </summary>
-    public class PaymentType : IEntity
+    public class PaymentType : BaseEntity, IEntity
     {
         private const string TAG = "X:" + nameof(PaymentType);
 
-        public int Id { get; set; }
+        //public int Id { get; set; }
         [Required]
         public string Description { get; set; }
         public bool IsDefault { get; set; } = false;

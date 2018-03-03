@@ -22,7 +22,7 @@ namespace TwaWallet.Web.Controllers
         }
 
         // GET: Interval/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(Guid? id)
         {
             if (id == null)
             {
@@ -60,7 +60,7 @@ namespace TwaWallet.Web.Controllers
         }
 
         // GET: Interval/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(Guid? id)
         {
             if (id == null)
             {
@@ -91,7 +91,7 @@ namespace TwaWallet.Web.Controllers
         }
 
         // GET: Interval/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(Guid? id)
         {
             if (id == null)
             {
@@ -108,7 +108,7 @@ namespace TwaWallet.Web.Controllers
         // POST: Interval/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(Guid id)
         {
             Interval interval = db.Intervals.Find(id);
             db.Intervals.Remove(interval);

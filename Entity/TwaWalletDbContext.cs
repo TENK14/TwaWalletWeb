@@ -44,7 +44,7 @@ namespace TwaWallet.Entity
 
         public System.Data.Entity.DbSet<TwaWallet.Model.RecurringPayment> RecurringPayments { get; set; }
 
-        public System.Data.Entity.DbSet<TwaWallet.Model.User> Users { get; set; }
+        public System.Data.Entity.DbSet<TwaWallet.Model.LoginAccount> LoginAccounts { get; set; }
 
         public System.Data.Entity.DbSet<TwaWallet.Model.Record> Records { get; set; }
     }

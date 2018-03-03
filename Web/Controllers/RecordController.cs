@@ -18,18 +18,18 @@ namespace TwaWallet.Web.Controllers
         // GET: Record
         public ActionResult Index()
         {
-            var records = db.Records.OrderByDescending(r => r.Date).Include(r => r.Category).Include(r => r.PaymentType).Include(r => r.User);
+            var records = db.Records.OrderByDescending(r => r.Date).Include(r => r.Category).Include(r => r.PaymentType).Include(r => r.LoginAccount);
             return View(records.ToList());
         }
 
         // GET: Record/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Record record = db.Records.Find(id);
+            Record record = db.Records.Include(r => r.Category).Include(r => r.PaymentType).Include(r => r.LoginAccount).Single(r => r.Id == id);
             if (record == null)
             {
                 return HttpNotFound();
@@ -44,9 +44,11 @@ namespace TwaWallet.Web.Controllers
 
             ViewBag.CategoryId = new SelectList(db.Categories.OrderByDescending(c => c.IsDefault), "Id", "Description");
             ViewBag.PaymentTypeId = new SelectList(db.PaymentTypes.OrderByDescending(p => p.IsDefault), "Id", "Description");
-            ViewBag.UserId = new SelectList(db.Users, "Id", "Name"); // TODO: napric celym systemem bude loginAccount = prihlaseny User a pak tato polozka bude skryta (preddefinovana)
+            ViewBag.UserId = new SelectList(db.LoginAccounts, "Id", "Username"); // TODO: napric celym systemem bude loginAccount = prihlaseny User a pak tato polozka bude skryta (preddefinovana)
+            ViewBag.Date = DateTime.Now;
                         
             return View(record);
+            //return View(); // TODO: record nepredavas do view
         }
 
         // POST: Record/Create
@@ -65,25 +67,25 @@ namespace TwaWallet.Web.Controllers
 
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Description", record.CategoryId);
             ViewBag.PaymentTypeId = new SelectList(db.PaymentTypes, "Id", "Description", record.PaymentTypeId);
-            ViewBag.UserId = new SelectList(db.Users, "Id", "Name", record.UserId);
+            ViewBag.UserId = new SelectList(db.LoginAccounts, "Id", "Username", record.LoginAccountId);
             return View(record);
         }
 
         // GET: Record/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Record record = db.Records.Find(id);
+            Record record = db.Records.Include(r => r.Category).Include(r => r.PaymentType).Include(r => r.LoginAccount).Single(r => r.Id == id);
             if (record == null)
             {
                 return HttpNotFound();
             }
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Description", record.CategoryId);
             ViewBag.PaymentTypeId = new SelectList(db.PaymentTypes, "Id", "Description", record.PaymentTypeId);
-            ViewBag.UserId = new SelectList(db.Users, "Id", "Name", record.UserId);
+            ViewBag.UserId = new SelectList(db.LoginAccounts, "Id", "Username", record.LoginAccountId);
             return View(record);
         }
 
@@ -102,18 +104,20 @@ namespace TwaWallet.Web.Controllers
             }
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Description", record.CategoryId);
             ViewBag.PaymentTypeId = new SelectList(db.PaymentTypes, "Id", "Description", record.PaymentTypeId);
-            ViewBag.UserId = new SelectList(db.Users, "Id", "Name", record.UserId);
+            ViewBag.UserId = new SelectList(db.LoginAccounts, "Id", "Username", record.LoginAccountId);
             return View(record);
         }
 
         // GET: Record/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Record record = db.Records.Find(id);
+            //Record record = db.Records.Find(id);
+
+            Record record = db.Records.Include(r => r.Category).Include(r => r.PaymentType).Include(r => r.LoginAccount).Single(r => r.Id == id);
             if (record == null)
             {
                 return HttpNotFound();
@@ -124,7 +128,7 @@ namespace TwaWallet.Web.Controllers
         // POST: Record/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(Guid id)
         {
             Record record = db.Records.Find(id);
             db.Records.Remove(record);

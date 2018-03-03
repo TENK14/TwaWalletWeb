@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace TwaWallet.Model
 {
-    public class Record : IEntity
+    public class Record : BaseEntity, IEntity
     {
         private const string TAG = "X:" + nameof(Record);
 
-        public int Id { get; set; }
+        //public int Id { get; set; }
         [Required]
         public float Cost { get; set; }
         
@@ -20,7 +20,7 @@ namespace TwaWallet.Model
         /// ForingKey
         /// </summary>
         [Required]
-        public int CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
         public Category Category { get; set; }
         [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; } = DateTime.Now;
@@ -29,13 +29,13 @@ namespace TwaWallet.Model
         /// ForingKey
         /// </summary>
         [Required]
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public Guid LoginAccountId { get; set; }
+        public LoginAccount LoginAccount { get; set; }
         /// <summary>
         /// ForingKey
         /// </summary>
         [Required]
-        public int PaymentTypeId { get; set; }
+        public Guid PaymentTypeId { get; set; }
         public PaymentType PaymentType { get; set; }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace TwaWallet.Model
                 //+ $"{PaymentTypeId}{delimiter}"
                 + $"{PaymentType.Description}{delimiter}"
                 //+ $"{OwnerId}{delimiter}"
-                + $"{User.Name}{delimiter}"
+                + $"{LoginAccount.Username}{delimiter}"
                 + $"{Tag}{delimiter}"
                 ;
         }
