@@ -154,7 +154,7 @@
     <Compile Include="Controllers\PaymentTypeController.cs" />
     <Compile Include="Controllers\RecordController.cs" />
     <Compile Include="Controllers\RecurringPaymentController.cs" />
-    <Compile Include="Controllers\RegistrationController.cs" />
+    <Compile Include="Controllers\LoginAccountController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -228,10 +228,11 @@
     <Content Include="Views\Record\Details.cshtml" />
     <Content Include="Views\Record\Edit.cshtml" />
     <Content Include="Views\Record\Index.cshtml" />
+    <Content Include="Views\LoginAccount\Registration.cshtml" />
+    <Content Include="Views\LoginAccount\LogIn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Registration\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
