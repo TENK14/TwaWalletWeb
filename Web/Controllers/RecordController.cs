@@ -44,7 +44,7 @@ namespace TwaWallet.Web.Controllers
 
             ViewBag.CategoryId = new SelectList(db.Categories.OrderByDescending(c => c.IsDefault), "Id", "Description");
             ViewBag.PaymentTypeId = new SelectList(db.PaymentTypes.OrderByDescending(p => p.IsDefault), "Id", "Description");
-            ViewBag.UserId = new SelectList(db.LoginAccounts, "Id", "Username"); // TODO: napric celym systemem bude loginAccount = prihlaseny User a pak tato polozka bude skryta (preddefinovana)
+            ViewBag.LoginAccountId = new SelectList(db.LoginAccounts, "Id", "Username"); // TODO: napric celym systemem bude loginAccount = prihlaseny User a pak tato polozka bude skryta (preddefinovana)
             ViewBag.Date = DateTime.Now;
                         
             return View(record);
@@ -56,7 +56,7 @@ namespace TwaWallet.Web.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Cost,Description,CategoryId,Date,Warranty,UserId,PaymentTypeId,Tag,Earnings")] Record record)
+        public ActionResult Create([Bind(Include = "Id,Cost,Description,CategoryId,Date,Warranty,LoginAccountId,PaymentTypeId,Tag,Earnings")] Record record)
         {
             if (ModelState.IsValid)
             {
