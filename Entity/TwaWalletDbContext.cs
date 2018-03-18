@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
@@ -10,7 +11,7 @@ using TwaWallet.Model;
 
 namespace TwaWallet.Entity
 {
-    public class TwaWalletDbContext : DbContext
+    public class TwaWalletDbContext : IdentityDbContext<LoginAccount>//DbContext
     {
         private new static bool AutoDetectChangesEnabled = true;
 
@@ -47,5 +48,10 @@ namespace TwaWallet.Entity
         public System.Data.Entity.DbSet<TwaWallet.Model.LoginAccount> LoginAccounts { get; set; }
 
         public System.Data.Entity.DbSet<TwaWallet.Model.Record> Records { get; set; }
+
+        public static TwaWalletDbContext Create()
+        {
+            return new TwaWalletDbContext();
+        }
     }
 }

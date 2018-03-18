@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,7 +14,7 @@ namespace TwaWallet.Model
     /// <summary>
     /// V původní aplikaci se jednalo o Ownera
     /// </summary>
-    public class LoginAccount : BaseEntity, IEntity
+    public class LoginAccount : IdentityUser,IEntity //BaseEntity, IEntity
     {
         private const string TAG = "X:" + nameof(LoginAccount);
 
@@ -77,6 +80,14 @@ namespace TwaWallet.Model
             //Log.Debug(TAG, nameof(ToString));
 
             return Username;
+        }
+
+        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<LoginAccount> manager)
+        {
+            // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
+            var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
+            // Add custom user claims here
+            return userIdentity;
         }
     }
 }
