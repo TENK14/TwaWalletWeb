@@ -21,7 +21,8 @@ namespace TwaWallet.Model
         public Guid PaymentTypeId { get; set; }
         public PaymentType PaymentType { get; set; }
         [Required]
-        public Guid LoginAccountId { get; set; }
+        //public Guid LoginAccountId { get; set; }
+        public string LoginAccountId { get; set; }
         public LoginAccount LoginAccount { get; set; }
         [Required]
         public float Cost { get; set; }

@@ -41,7 +41,7 @@ namespace TwaWallet.Web.Controllers
             {
                 using (var context = new TwaWalletDbContext()) // TODO: změň DB kontext pro: TwaWalletDbContext
                 {
-                    var userDb = context.LoginAccounts.SingleOrDefault(la => la.Username.Equals(objNewUser.Username) || la.Email.Equals(objNewUser.Email));
+                    var userDb = context.Users.SingleOrDefault(la => la.Username.Equals(objNewUser.Username) || la.Email.Equals(objNewUser.Email));
 
                     if (userDb == null)
                     {
@@ -51,7 +51,7 @@ namespace TwaWallet.Web.Controllers
                         objNewUser.CreateDate = DateTime.Now;
                         objNewUser.ModifyDate = DateTime.Now;
                         objNewUser.VCode = keyNew;
-                        context.LoginAccounts.Add(objNewUser);
+                        context.Users.Add(objNewUser);
                         context.SaveChanges();
                         ModelState.Clear();
                         return RedirectToAction("LogIn", "Login");
@@ -80,7 +80,7 @@ namespace TwaWallet.Web.Controllers
                 using (var context = new TwaWalletDbContext())
                 {
                     //var getUser = (from s in context.ObjRegisterUser where s.UserName == userName || s.EmailId == userName select s).FirstOrDefault();
-                    var getUser = context.LoginAccounts.SingleOrDefault(la => la.Username.Equals(userName) || la.Email.Equals(userName));
+                    var getUser = context.Users.SingleOrDefault(la => la.Username.Equals(userName) || la.Email.Equals(userName));
                     if (getUser != null)
                     {
                         var hashCode = getUser.VCode;

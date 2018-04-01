@@ -13,6 +13,7 @@ namespace TwaWallet.Model
     // TODO: V původní aplikaci se jednalo o Ownera
     /// <summary>
     /// V původní aplikaci se jednalo o Ownera
+    /// LoginAccount je dostupný přes context.Users - DbSet<LoginAccount> Users je nastaven v IdentityDbContext >> AspNet.Identity.EntityFramework
     /// </summary>
     public class LoginAccount : IdentityUser,IEntity //BaseEntity, IEntity
     {

@@ -29,7 +29,8 @@ namespace TwaWallet.Model
         /// ForingKey
         /// </summary>
         [Required]
-        public Guid LoginAccountId { get; set; }
+        //public Guid LoginAccountId { get; set; }
+        public string LoginAccountId { get; set; }
         public LoginAccount LoginAccount { get; set; }
         /// <summary>
         /// ForingKey

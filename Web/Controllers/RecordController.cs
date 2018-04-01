@@ -44,7 +44,7 @@ namespace TwaWallet.Web.Controllers
 
             ViewBag.CategoryId = new SelectList(db.Categories.OrderByDescending(c => c.IsDefault), "Id", "Description");
             ViewBag.PaymentTypeId = new SelectList(db.PaymentTypes.OrderByDescending(p => p.IsDefault), "Id", "Description");
-            ViewBag.LoginAccountId = new SelectList(db.LoginAccounts, "Id", "Username"); // TODO: napric celym systemem bude loginAccount = prihlaseny User a pak tato polozka bude skryta (preddefinovana)
+            ViewBag.LoginAccountId = new SelectList(db.Users, "Id", "Username"); // TODO: napric celym systemem bude loginAccount = prihlaseny User a pak tato polozka bude skryta (preddefinovana)
             ViewBag.Date = DateTime.Now;
                         
             return View(record);
@@ -67,7 +67,7 @@ namespace TwaWallet.Web.Controllers
 
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Description", record.CategoryId);
             ViewBag.PaymentTypeId = new SelectList(db.PaymentTypes, "Id", "Description", record.PaymentTypeId);
-            ViewBag.UserId = new SelectList(db.LoginAccounts, "Id", "Username", record.LoginAccountId);
+            ViewBag.UserId = new SelectList(db.Users, "Id", "Username", record.LoginAccountId);
             return View(record);
         }
 
@@ -85,7 +85,7 @@ namespace TwaWallet.Web.Controllers
             }
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Description", record.CategoryId);
             ViewBag.PaymentTypeId = new SelectList(db.PaymentTypes, "Id", "Description", record.PaymentTypeId);
-            ViewBag.UserId = new SelectList(db.LoginAccounts, "Id", "Username", record.LoginAccountId);
+            ViewBag.UserId = new SelectList(db.Users, "Id", "Username", record.LoginAccountId);
             return View(record);
         }
 
@@ -104,7 +104,7 @@ namespace TwaWallet.Web.Controllers
             }
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Description", record.CategoryId);
             ViewBag.PaymentTypeId = new SelectList(db.PaymentTypes, "Id", "Description", record.PaymentTypeId);
-            ViewBag.UserId = new SelectList(db.LoginAccounts, "Id", "Username", record.LoginAccountId);
+            ViewBag.UserId = new SelectList(db.Users, "Id", "Username", record.LoginAccountId);
             return View(record);
         }
 

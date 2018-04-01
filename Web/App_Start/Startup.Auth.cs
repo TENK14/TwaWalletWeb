@@ -11,8 +11,10 @@ using TwaWallet.Entity;
 using TwaWallet.Model;
 using TwaWallet.Web.App_Start;
 
+// TODO: původně to tu nebylo
+[assembly: OwinStartup(typeof(TwaWallet.Web.Startup))]
 namespace TwaWallet.Web
-{
+{    
     public partial class Startup
     {
         // For more information on configuring authentication, please visit https://go.microsoft.com/fwlink/?LinkId=301864

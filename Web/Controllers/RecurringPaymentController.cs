@@ -43,7 +43,7 @@ namespace TwaWallet.Web.Controllers
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Description");
             ViewBag.IntervalId = new SelectList(db.Intervals, "Id", "Description");
             ViewBag.PaymentTypeId = new SelectList(db.PaymentTypes, "Id", "Description");
-            ViewBag.UserId = new SelectList(db.LoginAccounts, "Id", "Username");
+            ViewBag.UserId = new SelectList(db.Users, "Id", "Username");
             return View();
         }
 
@@ -64,7 +64,7 @@ namespace TwaWallet.Web.Controllers
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Description", recurringPayment.CategoryId);
             ViewBag.IntervalId = new SelectList(db.Intervals, "Id", "Description", recurringPayment.IntervalId);
             ViewBag.PaymentTypeId = new SelectList(db.PaymentTypes, "Id", "Description", recurringPayment.PaymentTypeId);
-            ViewBag.UserId = new SelectList(db.LoginAccounts, "Id", "Username", recurringPayment.LoginAccountId);
+            ViewBag.UserId = new SelectList(db.Users, "Id", "Username", recurringPayment.LoginAccountId);
             return View(recurringPayment);
         }
 
@@ -83,7 +83,7 @@ namespace TwaWallet.Web.Controllers
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Description", recurringPayment.CategoryId);
             ViewBag.IntervalId = new SelectList(db.Intervals, "Id", "Description", recurringPayment.IntervalId);
             ViewBag.PaymentTypeId = new SelectList(db.PaymentTypes, "Id", "Description", recurringPayment.PaymentTypeId);
-            ViewBag.UserId = new SelectList(db.LoginAccounts, "Id", "Username", recurringPayment.LoginAccountId);
+            ViewBag.UserId = new SelectList(db.Users, "Id", "Username", recurringPayment.LoginAccountId);
             return View(recurringPayment);
         }
 
@@ -103,7 +103,7 @@ namespace TwaWallet.Web.Controllers
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Description", recurringPayment.CategoryId);
             ViewBag.IntervalId = new SelectList(db.Intervals, "Id", "Description", recurringPayment.IntervalId);
             ViewBag.PaymentTypeId = new SelectList(db.PaymentTypes, "Id", "Description", recurringPayment.PaymentTypeId);
-            ViewBag.UserId = new SelectList(db.LoginAccounts, "Id", "Username", recurringPayment.LoginAccountId);
+            ViewBag.UserId = new SelectList(db.Users, "Id", "Username", recurringPayment.LoginAccountId);
             return View(recurringPayment);
         }
 
