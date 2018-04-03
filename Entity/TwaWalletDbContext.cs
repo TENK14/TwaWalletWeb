@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿//using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -17,13 +19,19 @@ namespace TwaWallet.Entity
 
         static TwaWalletDbContext()
         {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<TwaWalletDbContext, Configuration>());
+            System.Data.Entity.Database.SetInitializer(new MigrateDatabaseToLatestVersion<TwaWalletDbContext, Configuration>());
             //Database.SetInitializer<TwaWalletDbContext>(new TwaWalletDbInitializer());
         }
 
         public TwaWalletDbContext() : base("name=DefaultConnectionString")
         {
             this.Configuration.AutoDetectChangesEnabled = AutoDetectChangesEnabled;
+
+        }
+
+        public TwaWalletDbContext(DbContextOptions<LoginAccount> options)
+            :base(options)
+        {
 
         }
 

@@ -1,0 +1,31 @@
+
+ Controller Scaffolding:
+ https://docs.microsoft.com/cs-cz/aspnet/mvc/overview/getting-started/getting-started-with-ef-using-mvc/creating-an-entity-framework-data-model-for-an-asp-net-mvc-application
+ Pøihlášení:
+ https://docs.microsoft.com/cs-cz/aspnet/mvc/overview/security/create-an-aspnet-mvc-5-web-app-with-email-confirmation-and-password-reset
+
+ Asp.net Core + full .net framework
+ https://docs.microsoft.com/cs-cz/aspnet/core/tutorials/first-mvc-app/start-mvc?tabs=aspnetcore2x
+ https://docs.microsoft.com/en-us/aspnet/core/
+ https://docs.microsoft.com/cs-cz/aspnet/core/
+ https://docs.microsoft.com/en-us/aspnet/core/tutorials/index
+
+ https://docs.microsoft.com/cs-cz/aspnet/core/tutorials/razor-pages/model
+
+ https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.builder.mvcapplicationbuilderextensions.usemvc?view=aspnetcore-2.0
+ https://docs.microsoft.com/cs-cz/aspnet/core/fundamentals/static-files?tabs=aspnetcore2x
+
+ https://docs.microsoft.com/cs-cz/aspnet/core/fundamentals/startup
+
+ https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity?tabs=visual-studio%2Caspnetcore2x
+
+ Identity:
+ https://github.com/aspnet/Identity
+ https://www.asp.net/identity
+ https://docs.microsoft.com/en-us/aspnet/identity/overview/getting-started/introduction-to-aspnet-identity
+
+ https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.webhost?view=aspnetcore-2.0
+
+ Asp.net non-Core:
+ https://docs.microsoft.com/cs-cz/aspnet/mvc/overview/security/create-an-aspnet-mvc-5-web-app-with-email-confirmation-and-password-reset
+ https://docs.microsoft.com/en-us/aspnet/aspnet/overview/owin-and-katana/owin-startup-class-detection
