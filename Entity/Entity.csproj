@@ -217,6 +217,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationDbContext.cs" />
+    <Compile Include="ApplicationDbContextExtensions.cs" />
     <Compile Include="DbInitializer.cs" />
     <Compile Include="Migrations\20180408190013_Init.cs" />
     <Compile Include="Migrations\20180408190013_Init.designer.cs">

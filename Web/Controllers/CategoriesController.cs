@@ -32,7 +32,10 @@ namespace Web.Controllers
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Categories.Include(c => c.ApplicationUser);
+            var user = await _userManager.GetUserAsync(User);
+            // TODO: implementuj, ze kontext, bude vracet pouze uzivatelska data
+            //var applicationDbContext = _context.Categories.GetUsersContent();
+            var applicationDbContext = _context.Categories.Include(c => c.ApplicationUser).Where(c => c.ApplicationUser == user);
             return View(await applicationDbContext.ToListAsync());
         }
 

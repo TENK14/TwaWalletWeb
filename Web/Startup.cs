@@ -77,9 +77,8 @@ namespace TwaWallet.Web
                 //logger.LogWarning("Turn on databases....");
 
                 var database = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-
-
                 database.Database.Migrate();
+                database.EnsureSeedData();
 
                 //var userManager = app.ApplicationServices.GetService<UserManager<ApplicationUser>>();
                 //var roleManager = app.ApplicationServices.GetService<RoleManager<IdentityRole>>();
@@ -90,7 +89,7 @@ namespace TwaWallet.Web
                 //serviceScope.ServiceProvider.GetService<ApplicationDbContext>()
                 //    .EnsureSeedData(userManager, roleManager, adminUser, adminPassword);
 
-                
+
             }
         }
     }

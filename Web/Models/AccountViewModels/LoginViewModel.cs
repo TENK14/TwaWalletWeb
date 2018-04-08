@@ -9,8 +9,8 @@ namespace TwaWallet.Web.Models.AccountViewModels
     public class LoginViewModel
     {
         [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+        //[EmailAddress]
+        public string UsernameOrEmail { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

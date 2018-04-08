@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using TwaWallet.Entity;
 using TwaWallet.Model;
 using TwaWallet.Web.Models;
 using TwaWallet.Web.Models.AccountViewModels;
@@ -25,8 +26,10 @@ namespace TwaWallet.Web.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
+        private readonly ApplicationDbContext _context;
 
         public AccountController(
+            ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
@@ -36,6 +39,7 @@ namespace TwaWallet.Web.Controllers
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
+            _context = context;
         }
 
         [TempData]
@@ -60,9 +64,27 @@ namespace TwaWallet.Web.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+
+                Microsoft.AspNetCore.Identity.SignInResult result = null;
+
+                if (model.UsernameOrEmail.Contains("@"))
+                {
+                    var user = _context.Users.SingleOrDefault(u => u.NormalizedEmail.Equals(model.UsernameOrEmail.ToUpper()));
+                    if (user != null)
+                    {
+                        result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
+                    }
+                    else // Maybe symbol '@' is in username
+                    {
+                        result = await _signInManager.PasswordSignInAsync(model.UsernameOrEmail, model.Password, model.RememberMe, lockoutOnFailure: false);
+                    }
+                }
+                else
+                {
+                    // This doesn't count login failures towards account lockout
+                    // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                    result = await _signInManager.PasswordSignInAsync(model.UsernameOrEmail, model.Password, model.RememberMe, lockoutOnFailure: false);
+                }
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
@@ -221,7 +243,26 @@ namespace TwaWallet.Web.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                if (await _userManager.FindByEmailAsync(model.Email) != null)
+                {
+                    //throw new ApplicationException($"User with this email is registered.");
+                    //ViewBag.errorMessage = "User with this email is registered.";
+                    //ViewBag.Model[""].Errors.Add()
+                    ModelState.AddModelError("Email", "User with this email is registered.");
+                    //return View("Error");
+                    return View();
+                }
+
+                if (await _userManager.FindByNameAsync(model.UserName) != null)
+                {
+                    //throw new ApplicationException($"User with this email is registered.");
+                    //ViewBag.errorMessage = "User with this username is registered.";
+                    ModelState.AddModelError("UserName", "User with this username is registered.");
+                    return View();
+                }
+
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -233,6 +274,9 @@ namespace TwaWallet.Web.Controllers
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");
+
+                    _context.NewApplicationUserSeedData(user);
+
                     return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);
