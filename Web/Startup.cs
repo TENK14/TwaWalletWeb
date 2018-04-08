@@ -59,12 +59,39 @@ namespace TwaWallet.Web
 
             app.UseAuthentication();
 
+            InitDatabase(app);
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private void InitDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
+                .CreateScope())
+            {
+                //logger.LogWarning("Turn on databases....");
+
+                var database = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+
+
+                database.Database.Migrate();
+
+                //var userManager = app.ApplicationServices.GetService<UserManager<ApplicationUser>>();
+                //var roleManager = app.ApplicationServices.GetService<RoleManager<IdentityRole>>();
+
+                //var adminUser = Configuration["ADMIN_USER"];
+                //var adminPassword = Configuration["ADMIN_PASSWORD"];
+
+                //serviceScope.ServiceProvider.GetService<ApplicationDbContext>()
+                //    .EnsureSeedData(userManager, roleManager, adminUser, adminPassword);
+
+                
+            }
         }
     }
 }

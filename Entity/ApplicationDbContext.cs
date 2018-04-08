@@ -16,9 +16,9 @@ namespace TwaWallet.Entity
         {
         }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(builder);
+            base.OnModelCreating(modelBuilder);
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
@@ -27,6 +27,65 @@ namespace TwaWallet.Entity
             //builder.Configurations.AddFromAssembly(this.GetType().Assembly);
             // TODO: Havit featura - zjisti, jak pak pracuji s DB, kdyz nejsou DbSety
             //modelBuilder.RegisterModelFromAssembly(typeof(User).Assembly); 
+
+            // Category
+            modelBuilder.Entity(typeof(Category))
+            .HasOne(typeof(ApplicationUser), nameof(Category.ApplicationUser))
+            .WithMany()
+            .HasForeignKey(nameof(Category.ApplicationUserId))
+            .OnDelete(DeleteBehavior.Restrict);
+
+            // PaymentType
+            modelBuilder.Entity(typeof(PaymentType))
+            .HasOne(typeof(ApplicationUser), nameof(PaymentType.ApplicationUser))
+            .WithMany()
+            .HasForeignKey(nameof(PaymentType.ApplicationUserId))
+            .OnDelete(DeleteBehavior.Restrict);
+
+            // Record
+            modelBuilder.Entity(typeof(Record))
+            .HasOne(typeof(ApplicationUser), nameof(Record.ApplicationUser))
+            .WithMany()
+            .HasForeignKey(nameof(Record.ApplicationUserId))
+            .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity(typeof(Record))
+            .HasOne(typeof(Category), nameof(Record.Category))
+            .WithMany()
+            .HasForeignKey(nameof(Record.CategoryId))
+            .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity(typeof(Record))
+            .HasOne(typeof(PaymentType), nameof(Record.PaymentType))
+            .WithMany()
+            .HasForeignKey(nameof(Record.PaymentTypeId))
+            .OnDelete(DeleteBehavior.SetNull);
+
+            // RecurringPayment
+            modelBuilder.Entity(typeof(RecurringPayment))
+            .HasOne(typeof(ApplicationUser), nameof(RecurringPayment.ApplicationUser))
+            .WithMany()
+            .HasForeignKey(nameof(RecurringPayment.ApplicationUserId))
+            .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity(typeof(RecurringPayment))
+            .HasOne(typeof(Category), nameof(RecurringPayment.Category))
+            .WithMany()
+            .HasForeignKey(nameof(RecurringPayment.CategoryId))
+            .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity(typeof(RecurringPayment))
+            .HasOne(typeof(PaymentType), nameof(RecurringPayment.PaymentType))
+            .WithMany()
+            .HasForeignKey(nameof(RecurringPayment.PaymentTypeId))
+            .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity(typeof(RecurringPayment))
+            .HasOne(typeof(Interval), nameof(RecurringPayment.Interval))
+            .WithMany()
+            .HasForeignKey(nameof(RecurringPayment.IntervalId))
+            .OnDelete(DeleteBehavior.Restrict);
+
         }
 
         /// <summary>

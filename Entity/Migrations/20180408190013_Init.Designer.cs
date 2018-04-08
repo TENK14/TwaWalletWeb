@@ -11,7 +11,7 @@ using TwaWallet.Entity;
 namespace TwaWallet.Entity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180408000346_Init")]
+    [Migration("20180408190013_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -281,8 +281,7 @@ namespace TwaWallet.Entity.Migrations
                     b.Property<string>("ApplicationUserId")
                         .IsRequired();
 
-                    b.Property<string>("CategoryId")
-                        .IsRequired();
+                    b.Property<string>("CategoryId");
 
                     b.Property<float>("Cost");
 
@@ -302,8 +301,7 @@ namespace TwaWallet.Entity.Migrations
 
                     b.Property<DateTime>("LastUpdate");
 
-                    b.Property<string>("PaymentTypeId")
-                        .IsRequired();
+                    b.Property<string>("PaymentTypeId");
 
                     b.Property<string>("Tag");
 
@@ -372,7 +370,7 @@ namespace TwaWallet.Entity.Migrations
                     b.HasOne("TwaWallet.Model.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("TwaWallet.Model.PaymentType", b =>
@@ -380,7 +378,7 @@ namespace TwaWallet.Entity.Migrations
                     b.HasOne("TwaWallet.Model.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("TwaWallet.Model.Record", b =>
@@ -388,15 +386,17 @@ namespace TwaWallet.Entity.Migrations
                     b.HasOne("TwaWallet.Model.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TwaWallet.Model.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("TwaWallet.Model.PaymentType", "PaymentType")
                         .WithMany()
-                        .HasForeignKey("PaymentTypeId");
+                        .HasForeignKey("PaymentTypeId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("TwaWallet.Model.RecurringPayment", b =>
@@ -404,22 +404,22 @@ namespace TwaWallet.Entity.Migrations
                     b.HasOne("TwaWallet.Model.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TwaWallet.Model.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("TwaWallet.Model.Interval", "Interval")
                         .WithMany()
                         .HasForeignKey("IntervalId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TwaWallet.Model.PaymentType", "PaymentType")
                         .WithMany()
                         .HasForeignKey("PaymentTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 #pragma warning restore 612, 618
         }

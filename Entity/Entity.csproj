@@ -218,13 +218,9 @@
   <ItemGroup>
     <Compile Include="ApplicationDbContext.cs" />
     <Compile Include="DbInitializer.cs" />
-    <Compile Include="Migrations\00000000000000_CreateIdentitySchema.cs" />
-    <Compile Include="Migrations\00000000000000_CreateIdentitySchema.designer.cs">
-      <DependentUpon>00000000000000_CreateIdentitySchema.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20180408000346_Init.cs" />
-    <Compile Include="Migrations\20180408000346_Init.designer.cs">
-      <DependentUpon>20180408000346_Init.cs</DependentUpon>
+    <Compile Include="Migrations\20180408190013_Init.cs" />
+    <Compile Include="Migrations\20180408190013_Init.designer.cs">
+      <DependentUpon>20180408190013_Init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\ApplicationDbContextModelSnapshot.cs" />
     <Compile Include="Migrations\Configuration.cs" />

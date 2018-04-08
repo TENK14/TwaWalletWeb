@@ -26,7 +26,9 @@ namespace TwaWallet.Model
         /// </summary>
         //[Required] // kategorie můze být smazána
         //public Guid CategoryId { get; set; }
+        
         public string CategoryId { get; set; }
+        [ForeignKey("CategoryId")]
         public Category Category { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]

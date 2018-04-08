@@ -252,7 +252,7 @@ namespace TwaWallet.Entity.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     ApplicationUserId = table.Column<string>(nullable: false),
-                    CategoryId = table.Column<string>(nullable: false),
+                    CategoryId = table.Column<string>(nullable: true),
                     Cost = table.Column<float>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     Description = table.Column<string>(nullable: false),
@@ -261,7 +261,7 @@ namespace TwaWallet.Entity.Migrations
                     IntervalId = table.Column<string>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     LastUpdate = table.Column<DateTime>(nullable: false),
-                    PaymentTypeId = table.Column<string>(nullable: false),
+                    PaymentTypeId = table.Column<string>(nullable: true),
                     Tag = table.Column<string>(nullable: true),
                     Warranty = table.Column<int>(nullable: false)
                 },

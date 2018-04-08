@@ -280,8 +280,7 @@ namespace TwaWallet.Entity.Migrations
                     b.Property<string>("ApplicationUserId")
                         .IsRequired();
 
-                    b.Property<string>("CategoryId")
-                        .IsRequired();
+                    b.Property<string>("CategoryId");
 
                     b.Property<float>("Cost");
 
@@ -301,8 +300,7 @@ namespace TwaWallet.Entity.Migrations
 
                     b.Property<DateTime>("LastUpdate");
 
-                    b.Property<string>("PaymentTypeId")
-                        .IsRequired();
+                    b.Property<string>("PaymentTypeId");
 
                     b.Property<string>("Tag");
 
@@ -365,7 +363,7 @@ namespace TwaWallet.Entity.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
-            
+
             modelBuilder.Entity("TwaWallet.Model.Category", b =>
                 {
                     b.HasOne("TwaWallet.Model.ApplicationUser", "ApplicationUser")
@@ -391,11 +389,13 @@ namespace TwaWallet.Entity.Migrations
 
                     b.HasOne("TwaWallet.Model.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("TwaWallet.Model.PaymentType", "PaymentType")
                         .WithMany()
-                        .HasForeignKey("PaymentTypeId");
+                        .HasForeignKey("PaymentTypeId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("TwaWallet.Model.RecurringPayment", b =>
@@ -407,7 +407,8 @@ namespace TwaWallet.Entity.Migrations
 
                     b.HasOne("TwaWallet.Model.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("TwaWallet.Model.Interval", "Interval")
                         .WithMany()
@@ -416,7 +417,8 @@ namespace TwaWallet.Entity.Migrations
 
                     b.HasOne("TwaWallet.Model.PaymentType", "PaymentType")
                         .WithMany()
-                        .HasForeignKey("PaymentTypeId");
+                        .HasForeignKey("PaymentTypeId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 #pragma warning restore 612, 618
         }
