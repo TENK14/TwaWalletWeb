@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,23 +12,32 @@ namespace TwaWallet.Model
     {
         private const string TAG = "X:" + nameof(RecurringPayment);
 
-        //public int Id { get; set; }
+        //[Key]
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        //public string RecurringPaymentId { get; set; }
+
         [Required]
         public string Description { get; set; }
-        [Required]
-        public Guid CategoryId { get; set; }
+
+        //[Required] // kategorie můze být smazána
+        //public Guid CategoryId { get; set; }
+        public string CategoryId { get; set; }
         public Category Category { get; set; }
-        [Required]
-        public Guid PaymentTypeId { get; set; }
+
+        //[Required] // typ platby může být smazán
+        //public Guid PaymentTypeId { get; set; }
+        public string PaymentTypeId { get; set; }
         public PaymentType PaymentType { get; set; }
         [Required]
         //public Guid LoginAccountId { get; set; }
-        public string LoginAccountId { get; set; }
-        public LoginAccount LoginAccount { get; set; }
+        public string ApplicationUserId { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
         [Required]
         public float Cost { get; set; }
+
         [Required]
-        public Guid IntervalId { get; set; }
+        //public Guid IntervalId { get; set; }
+        public string IntervalId { get; set; }
         /// <summary>
         /// YYMMDD
         /// </summary>
@@ -39,6 +49,7 @@ namespace TwaWallet.Model
         public bool Earnings { get; set; } = false;
         public int Warranty { get; set; }
         public string Tag { get; set; }
+
         [Required]
         public DateTime DateCreated { get; set; } = DateTime.Now;
 
@@ -69,7 +80,7 @@ namespace TwaWallet.Model
                     + $"{nameof(Cost)}: {Cost}, \r"
                     + $"{ nameof(CategoryId)}: {CategoryId}, \r"
                     + $"{ nameof(Warranty)}: {Warranty}, \r"
-                    + $"{ nameof(LoginAccountId)}: {LoginAccountId}, \r"
+                    + $"{ nameof(ApplicationUserId)}: {ApplicationUserId}, \r"
                     + $"{ nameof(PaymentTypeId)}: {PaymentTypeId}, \r"
                     + $"{ nameof(Earnings)}: {Earnings}, \r"
                     + $"{ nameof(DateCreated)}: {DateCreated.ToString(dateFormat)}\r"

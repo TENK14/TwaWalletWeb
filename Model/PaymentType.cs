@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,10 +15,20 @@ namespace TwaWallet.Model
     {
         private const string TAG = "X:" + nameof(PaymentType);
 
-        //public int Id { get; set; }
+        //[Key]
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        //public string PaymentTypeId { get; set; }
+        
         [Required]
         public string Description { get; set; }
         public bool IsDefault { get; set; } = false;
+
+        /// <summary>
+        /// Kadý uživatel si může definovat vlastní typy plateb.
+        /// </summary>
+        [Required]
+        public string ApplicationUserId { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
 
         public override string ToString()
         {

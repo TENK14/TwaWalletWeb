@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Web.Models;
+using TwaWallet.Web.Models;
 
-namespace Web.Controllers
+namespace TwaWallet.Web.Controllers
 {
     public class HomeController : Controller
     {

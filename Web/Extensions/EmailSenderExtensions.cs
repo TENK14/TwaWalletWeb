@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using Web.Services;
+using TwaWallet.Web.Services;
 
-namespace Web.Services
+namespace TwaWallet.Web.Services
 {
     public static class EmailSenderExtensions
     {

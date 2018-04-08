@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,32 +12,41 @@ namespace TwaWallet.Model
     {
         private const string TAG = "X:" + nameof(Record);
 
-        //public int Id { get; set; }
+        //[Key]
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        //public string RecordId { get; set; }
+
         [Required]
         public float Cost { get; set; }
         
         public string Description { get; set; }
+
         /// <summary>
         /// ForingKey
         /// </summary>
-        [Required]
-        public Guid CategoryId { get; set; }
+        //[Required] // kategorie můze být smazána
+        //public Guid CategoryId { get; set; }
+        public string CategoryId { get; set; }
         public Category Category { get; set; }
+
         [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; } = DateTime.Now;
         public int Warranty { get; set; } = 0;
+
         /// <summary>
         /// ForingKey
         /// </summary>
         [Required]
         //public Guid LoginAccountId { get; set; }
-        public string LoginAccountId { get; set; }
-        public LoginAccount LoginAccount { get; set; }
+        public string ApplicationUserId { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
+
         /// <summary>
         /// ForingKey
         /// </summary>
-        [Required]
-        public Guid PaymentTypeId { get; set; }
+        //[Required] // typ platby může být smazán
+        //public Guid PaymentTypeId { get; set; }
+        public string PaymentTypeId { get; set; }
         public PaymentType PaymentType { get; set; }
 
         /// <summary>
@@ -79,12 +89,12 @@ namespace TwaWallet.Model
                 + $"{Cost}{delimiter}"
                 + $"{Description}{delimiter}"
                 //+ $"{CategoryId}{delimiter}"
-                + $"{Category?.Description ?? string.Empty}{delimiter}"
+                + $"{Category?.Description ?? String.Empty}{delimiter}"
                 + $"{Warranty}{delimiter}"
                 //+ $"{PaymentTypeId}{delimiter}"
-                + $"{PaymentType.Description}{delimiter}"
+                + $"{PaymentType?.Description ?? String.Empty}{delimiter}"
                 //+ $"{OwnerId}{delimiter}"
-                + $"{LoginAccount.Username}{delimiter}"
+                + $"{ApplicationUser.UserName}{delimiter}"
                 + $"{Tag}{delimiter}"
                 ;
         }

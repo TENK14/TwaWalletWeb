@@ -10,11 +10,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Web.Models;
-using Web.Models.AccountViewModels;
-using Web.Services;
+using TwaWallet.Model;
+using TwaWallet.Web.Models;
+using TwaWallet.Web.Models.AccountViewModels;
+using TwaWallet.Web.Services;
 
-namespace Web.Controllers
+namespace TwaWallet.Web.Controllers
 {
     [Authorize]
     [Route("[controller]/[action]")]

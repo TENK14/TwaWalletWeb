@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,10 @@ namespace TwaWallet.Model
     public class Interval : BaseEntity,IEntity
     {
         private const string TAG = "X:" + nameof(Interval);
+
+        //[Key]
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        //public string IntervalId { get; set; }
 
         //public int Id { get; set; }
         [Required]
