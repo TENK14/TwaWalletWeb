@@ -37,6 +37,7 @@ namespace TwaWallet.Web
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+            //services.AddTransient<IDataLayer, DataLayer>();
 
             services.AddMvc();
         }
@@ -60,7 +61,7 @@ namespace TwaWallet.Web
             app.UseAuthentication();
 
             InitDatabase(app);
-
+            
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -79,7 +80,7 @@ namespace TwaWallet.Web
                 var database = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
                 database.Database.Migrate();
                 database.EnsureSeedData();
-
+                
                 //var userManager = app.ApplicationServices.GetService<UserManager<ApplicationUser>>();
                 //var roleManager = app.ApplicationServices.GetService<RoleManager<IdentityRole>>();
 

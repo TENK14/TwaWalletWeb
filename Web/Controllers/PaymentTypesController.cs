@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -15,30 +14,27 @@ namespace Web.Controllers
 {
     [Authorize]
     [Route("[controller]/[action]")]
-    public class CategoriesController : Controller
+    public class PaymentTypesController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        //private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CategoriesController(ApplicationDbContext context,
-             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+        public PaymentTypesController(ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager)
         {
             _context = context;
-            _userManager = userManager;
-            //_signInManager = signInManager;
+            this._userManager = userManager;
         }
 
-        // GET: Categories
+        // GET: PaymentTypes
         public async Task<IActionResult> Index()
         {
-            // TODO: implementuj, ze kontext, bude vracet pouze uzivatelska data
-            var applicationDbContext = await GetUsersCategoriesAsync();
+            var applicationDbContext = await GetUsersPaymentTypes();
+
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Categories/Details/5
+        // GET: PaymentTypes/Details/5
         public async Task<IActionResult> Details(string id)
         {
             if (id == null)
@@ -46,47 +42,48 @@ namespace Web.Controllers
                 return NotFound();
             }
 
-            var category = await GetUsersCategoryAsync(id);
-            if (category == null)
+            var paymentType = await GetUsersPaymentType(id);
+
+            if (paymentType == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(paymentType);
         }
 
-        // GET: Categories/Create
+        // GET: PaymentTypes/Create
         public IActionResult Create()
         {
             ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
-        // POST: Categories/Create
+        // POST: PaymentTypes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Description,IsDefault,ApplicationUserId,Id")] Category category)
-        //public async Task<IActionResult> Create([Bind("Description,IsDefault,Id")] Category category)
+        public async Task<IActionResult> Create([Bind("Description,IsDefault,ApplicationUserId,Id")] PaymentType paymentType)
         {
             var user = await _userManager.GetUserAsync(User);
-            category.ApplicationUser = user;
-            
+            paymentType.ApplicationUser = user;
+
             if (ModelState.IsValid
-                || (ModelState.ErrorCount == 1 
+                || (ModelState.ErrorCount == 1
                     && ModelState.GetValidationState(nameof(Category.ApplicationUserId)) == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid)
                     )
             {
-                _context.Add(category);
+                _context.Add(paymentType);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id", category.ApplicationUserId);
-            return View(category);
+
+            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id", paymentType.ApplicationUserId);
+            return View(paymentType);
         }
 
-        // GET: Categories/Edit/5
+        // GET: PaymentTypes/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -94,62 +91,61 @@ namespace Web.Controllers
                 return NotFound();
             }
 
-            var category = await GetUsersCategoryAsync(id);
-
-            if (category == null)
+            var paymentType = await GetUsersPaymentType(id);
+            if (paymentType == null)
             {
                 return NotFound();
             }
-            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id", category.ApplicationUserId);
-            return View(category);
+            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id", paymentType.ApplicationUserId);
+            return View(paymentType);
         }
 
-        // POST: Categories/Edit/5
+        // POST: PaymentTypes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Description,IsDefault,ApplicationUserId,Id")] Category categoryIM)
+        public async Task<IActionResult> Edit(string id, [Bind("Description,IsDefault,ApplicationUserId,Id")] PaymentType paymentTypeIM)
         {
-            Category category = null;
+            PaymentType paymentType = null;
 
             if ( String.IsNullOrWhiteSpace(id)
-                || (categoryIM == null)
-                || (id != categoryIM.Id) )
+                || (paymentTypeIM == null)
+                || (id != paymentTypeIM.Id) )
             {
                 return NotFound();
             }
-
+            
             if (ModelState.IsValid
                 || (ModelState.ErrorCount == 1
-                    && ModelState.GetValidationState(nameof(Category.ApplicationUserId)) == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid)
+                    && ModelState.GetValidationState(nameof(PaymentType.ApplicationUserId)) == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid)
                     )
             {
                 try
                 {
-                    category = await GetUsersCategoryAsync(id);
+                    paymentType = await GetUsersPaymentType(paymentTypeIM.Id);
 
-                    if (category == null)
+                    if (paymentType == null)
                     {
                         return NotFound();
                     }
-                                        
-                    if (categoryIM.IsDefault)
+
+                    if (paymentTypeIM.IsDefault)
                     {
-                        var categoryDefault = (await GetUsersCategoriesAsync()).SingleOrDefault(c => c.IsDefault);
-                        categoryDefault.IsDefault = false;
-                        _context.Update(categoryDefault);
+                        PaymentType defaultPaymentType = (await GetUsersPaymentTypes()).SingleOrDefault(pt => pt.IsDefault);
+                        defaultPaymentType.IsDefault = false;
+                        _context.Update(defaultPaymentType);
                     }
 
-                    category.Description = categoryIM.Description;
-                    category.IsDefault = categoryIM.IsDefault;
+                    paymentType.Description = paymentTypeIM.Description;
+                    paymentType.IsDefault = paymentTypeIM.IsDefault;
 
-                    _context.Update(category);
+                    _context.Update(paymentType);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(categoryIM.Id))
+                    if (!PaymentTypeExists(paymentTypeIM.Id))
                     {
                         return NotFound();
                     }
@@ -160,62 +156,67 @@ namespace Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id", categoryIM.ApplicationUserId);
-            return View(category);
+            
+            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id", paymentTypeIM.ApplicationUserId);
+            return View(paymentTypeIM);
         }
 
-        // GET: Categories/Delete/5
+        // GET: PaymentTypes/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
-            if (id == null)
+            if (String.IsNullOrWhiteSpace(id))
             {
                 return NotFound();
             }
 
-            var category = await GetUsersCategoryAsync(id);
-
-            if (category == null)
+            var paymentType = await GetUsersPaymentType(id);
+            if (paymentType == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(paymentType);
         }
 
-        // POST: Categories/Delete/5
+        // POST: PaymentTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var category = await GetUsersCategoryAsync(id);
-
-            if (category == null)
+            if (String.IsNullOrWhiteSpace(id))
             {
                 return NotFound();
             }
 
-            _context.Categories.Remove(category);
+            var paymentType = await GetUsersPaymentType(id);
+
+            if (paymentType == null)
+            {
+                return NotFound();
+            }
+
+            _context.PaymentTypes.Remove(paymentType);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CategoryExists(string id)
+        private bool PaymentTypeExists(string id)
         {
-            return _context.Categories.Any(e => e.Id == id);
+            return _context.PaymentTypes.Any(e => e.Id == id);
         }
 
-        private async Task<Category> GetUsersCategoryAsync(string id)
+        private async Task<PaymentType> GetUsersPaymentType(string id)
         {
             var user = await _userManager.GetUserAsync(User);
 
-            return await _context.Categories.SingleOrDefaultAsync(m => m.Id == id && m.ApplicationUser == user);
+            return await _context.PaymentTypes.SingleOrDefaultAsync(pt => pt.Id == id && pt.ApplicationUser == user);
         }
 
-        private async Task<IQueryable<Category>> GetUsersCategoriesAsync()
+        private async Task<IQueryable<PaymentType>> GetUsersPaymentTypes()
         {
             var user = await _userManager.GetUserAsync(User);
 
-            return _context.Categories.Where(c => c.ApplicationUser == user);
+            return _context.PaymentTypes.Where(pt => pt.ApplicationUser == user);
         }
     }
 }
