@@ -55,7 +55,7 @@ namespace Web.Controllers
         // GET: PaymentTypes/Create
         public IActionResult Create()
         {
-            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", $"{nameof(ApplicationUser.UserName)}");
             return View();
         }
 
@@ -64,6 +64,7 @@ namespace Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("Description,IsDefault,ApplicationUserId,Id")] PaymentType paymentType)
         public async Task<IActionResult> Create([Bind("Description,IsDefault,ApplicationUserId,Id")] PaymentType paymentType)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -79,7 +80,7 @@ namespace Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id", paymentType.ApplicationUserId);
+            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", $"{nameof(ApplicationUser.UserName)}", paymentType.ApplicationUser);
             return View(paymentType);
         }
 

@@ -67,23 +67,24 @@ namespace Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Description,IsDefault,ApplicationUserId,Id")] Category category)
+        public async Task<IActionResult> Create([Bind("Description,IsDefault,ApplicationUserId,Id")] Category categoryIM)
         //public async Task<IActionResult> Create([Bind("Description,IsDefault,Id")] Category category)
-        {
-            var user = await _userManager.GetUserAsync(User);
-            category.ApplicationUser = user;
-            
+        {               
             if (ModelState.IsValid
                 || (ModelState.ErrorCount == 1 
                     && ModelState.GetValidationState(nameof(Category.ApplicationUserId)) == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid)
                     )
             {
-                _context.Add(category);
+                var user = await _userManager.GetUserAsync(User);
+
+                categoryIM.ApplicationUser = user;
+
+                _context.Add(categoryIM);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id", category.ApplicationUserId);
-            return View(category);
+            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id", categoryIM.ApplicationUserId);
+            return View(categoryIM);
         }
 
         // GET: Categories/Edit/5

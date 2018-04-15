@@ -13,6 +13,7 @@ using TwaWallet.Web.Models;
 using TwaWallet.Web.Services;
 using TwaWallet.Entity;
 using TwaWallet.Model;
+using TwaWallet.Web.DataLayer;
 
 namespace TwaWallet.Web
 {
@@ -37,7 +38,7 @@ namespace TwaWallet.Web
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
-            //services.AddTransient<IDataLayer, DataLayer>();
+            services.AddTransient<IDataLayer, DataLayer.DataLayer>();
 
             services.AddMvc();
         }
