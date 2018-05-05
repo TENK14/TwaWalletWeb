@@ -15,6 +15,7 @@ using TwaWallet.Model;
 using TwaWallet.Web.Models;
 using TwaWallet.Web.Models.AccountViewModels;
 using TwaWallet.Web.Services;
+using TwaWallet.Web.Controllers;
 
 namespace TwaWallet.Web.Controllers
 {
@@ -292,7 +293,8 @@ namespace TwaWallet.Web.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            //return RedirectToAction(nameof(HomeController.Index), "Home");
+            return RedirectToAction(nameof(RecordsController.Index), "Home");
         }
 
         [HttpPost]
@@ -380,7 +382,8 @@ namespace TwaWallet.Web.Controllers
         {
             if (userId == null || code == null)
             {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                //return RedirectToAction(nameof(HomeController.Index), "Home");
+                return RedirectToAction(nameof(RecordsController.Index), "Home");
             }
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
@@ -500,7 +503,8 @@ namespace TwaWallet.Web.Controllers
             }
             else
             {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                //return RedirectToAction(nameof(HomeController.Index), "Home");
+                return RedirectToAction(nameof(RecordsController.Index), "Home");
             }
         }
 

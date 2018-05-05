@@ -11,10 +11,10 @@ using TwaWallet.Entity;
 using TwaWallet.Model;
 using TwaWallet.Web.DataLayer;
 
-namespace Web.Controllers
+namespace TwaWallet.Web.Controllers
 {
     [Authorize]
-    [Route("[controller]/[action]")]
+    //[Route("[controller]/[action]")]
     public class RecordsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -39,7 +39,7 @@ namespace Web.Controllers
             _userManager = userManager;
             _dataLayer = dataLayer;
         }
-
+        
         // GET: Records
         public async Task<IActionResult> Index()
         {
@@ -49,7 +49,7 @@ namespace Web.Controllers
             if (records == null
                 || !records.Any())
             {
-                return NotFound();
+                //return NotFound();
             }
 
             _dataLayer.Load(records, r => r.Category);
@@ -58,7 +58,7 @@ namespace Web.Controllers
             return View(await records.ToListAsync());
 
         }
-
+        
         // GET: Records/Details/5
         public async Task<IActionResult> Details(string id)
         {
@@ -94,7 +94,37 @@ namespace Web.Controllers
             //ViewData["PaymentTypeId"] = new SelectList(_dataLayer.GetUserPaymentTypes(), "Id", $"{nameof(PaymentType.Description)}");
             ViewBag.CategoryId = new SelectList(_dataLayer.GetUserCategories().OrderByDescending(c => c.IsDefault), $"{nameof(Category.Id)}", $"{nameof(Category.Description)}");
             ViewBag.PaymentTypeId = new SelectList(_dataLayer.GetUserPaymentTypes().OrderByDescending(p => p.IsDefault), $"{nameof(PaymentType.Id)}", $"{nameof(PaymentType.Description)}");
-            
+
+            //ViewBag.CategoryId = new SelectList(db.Categories.OrderByDescending(c => c.IsDefault), "Id", "Description");
+            //ViewBag.PaymentTypeId = new SelectList(db.PaymentTypes.OrderByDescending(p => p.IsDefault), "Id", "Description");
+            //ViewBag.LoginAccountId = new SelectList(db.LoginAccounts, "Id", "Username"); // TODO: napric celym systemem bude loginAccount = prihlaseny User a pak tato polozka bude skryta (preddefinovana)
+            //ViewBag.Date = DateTime.Now;
+
+            ViewBag.Date = DateTime.Now;
+
+            return View(record);
+        }
+
+        // GET: Records/Create
+        public IActionResult Create2()
+        {
+            //ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", $"{nameof(ApplicationUser.UserName)}");
+            // TODO: zapoznamkuj
+            //ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", $"{nameof(Category.Description)}");
+            //ViewData["PaymentTypeId"] = new SelectList(_context.PaymentTypes, "Id", $"{nameof(PaymentType.Description)}");
+
+            var record = new Record();
+
+            //ViewData["CategoryId"] = new SelectList(_dataLayer.GetUserCategories(), "Id", $"{nameof(Category.Description)}");
+            //ViewData["PaymentTypeId"] = new SelectList(_dataLayer.GetUserPaymentTypes(), "Id", $"{nameof(PaymentType.Description)}");
+            ViewBag.CategoryId = new SelectList(_dataLayer.GetUserCategories().OrderByDescending(c => c.IsDefault), $"{nameof(Category.Id)}", $"{nameof(Category.Description)}");
+            ViewBag.PaymentTypeId = new SelectList(_dataLayer.GetUserPaymentTypes().OrderByDescending(p => p.IsDefault), $"{nameof(PaymentType.Id)}", $"{nameof(PaymentType.Description)}");
+
+            //ViewBag.CategoryId = new SelectList(db.Categories.OrderByDescending(c => c.IsDefault), "Id", "Description");
+            //ViewBag.PaymentTypeId = new SelectList(db.PaymentTypes.OrderByDescending(p => p.IsDefault), "Id", "Description");
+            //ViewBag.LoginAccountId = new SelectList(db.LoginAccounts, "Id", "Username"); // TODO: napric celym systemem bude loginAccount = prihlaseny User a pak tato polozka bude skryta (preddefinovana)
+            //ViewBag.Date = DateTime.Now;
+
             ViewBag.Date = DateTime.Now;
 
             return View(record);

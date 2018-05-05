@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using TwaWallet.Entity;
 using TwaWallet.Model;
 
-namespace Web.Controllers
+namespace TwaWallet.Web.Controllers
 {
     [Authorize]
     [Route("[controller]/[action]")]

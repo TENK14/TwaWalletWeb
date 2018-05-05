@@ -14,6 +14,7 @@ using TwaWallet.Web.Services;
 using TwaWallet.Entity;
 using TwaWallet.Model;
 using TwaWallet.Web.DataLayer;
+using TwaWallet.Web.Controllers;
 
 namespace TwaWallet.Web
 {
@@ -67,8 +68,10 @@ namespace TwaWallet.Web
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+                    //template: "{controller=Home}/{action=Index}/{id?}");
+            //template: "{controller=Records}/{action=Index}/{id?}");
+            template: "{controller=Records}/{action=Index}");
+        });
         }
 
         private void InitDatabase(IApplicationBuilder app)
