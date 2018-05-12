@@ -1,4 +1,6 @@
-
+Azure publishing An error occurred while starting the application:
+https://social.msdn.microsoft.com/Forums/vstudio/en-US/d84f968d-ede6-4c9d-b9d1-3b73ea18d146/azure-web-app-an-error-occurred-while-starting-the-application-with-aspnet-core-11-project?forum=windowsazurewebsitespreview
+ 
  Controller Scaffolding:
  https://docs.microsoft.com/cs-cz/aspnet/mvc/overview/getting-started/getting-started-with-ef-using-mvc/creating-an-entity-framework-data-model-for-an-asp-net-mvc-application
  Pøihlášení:

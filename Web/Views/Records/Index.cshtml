@@ -14,32 +14,32 @@
 <table class="table">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Cost)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Date)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Warranty)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Tag)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Earnings)
-                </th>
             <th>
-                @Html.DisplayNameFor(model => model.ApplicationUser)
+                @Html.DisplayNameFor(model => model.Cost)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            @*<th>
+            @Html.DisplayNameFor(model => model.ApplicationUser)
+        </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.Category)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PaymentType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tag)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Earnings)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Warranty)
             </th>
             <th></th>
         </tr>
@@ -56,8 +56,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
+            @*<td>
+            @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+        </td>*@
             <td>
-                @Html.DisplayFor(modelItem => item.Warranty)
+                @Html.DisplayFor(modelItem => item.Category.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentType.Description)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Tag)
@@ -66,13 +72,7 @@
                 @Html.DisplayFor(modelItem => item.Earnings)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PaymentType.Description)
+                @Html.DisplayFor(modelItem => item.Warranty)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

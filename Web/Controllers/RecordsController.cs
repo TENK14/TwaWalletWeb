@@ -207,22 +207,24 @@ namespace TwaWallet.Web.Controllers
                 try
                 {
                     var record = _dataLayer.GetUserRecord(id);
-
+                    
                     if (record == null)
                     {
                         return NotFound();
                     }
 
-                    record.Category = recordIM.Category;
+                    //record.Category = recordIM.Category;
+                    record.CategoryId = recordIM.CategoryId;
                     record.Cost = recordIM.Cost;
                     record.Date = recordIM.Date;
                     record.Description = recordIM.Description;
                     record.Earnings = recordIM.Earnings;
-                    record.PaymentType = recordIM.PaymentType;
+                    //record.PaymentType = recordIM.PaymentType;
+                    record.PaymentTypeId = recordIM.PaymentTypeId;
                     record.Tag = recordIM.Tag;
                     record.Warranty = recordIM.Warranty;
 
-                    _context.Update(recordIM);
+                    _context.Update(record);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
