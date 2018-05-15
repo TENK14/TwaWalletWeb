@@ -31,7 +31,9 @@ namespace TwaWallet.Model
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
+        //[DisplayFormat(DataFormatString = "{dd.MM.yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; } = DateTime.Now;
         public int Warranty { get; set; } = 0;
 
