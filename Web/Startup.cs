@@ -70,6 +70,7 @@ namespace TwaWallet.Web
                     name: "default",
                     //template: "{controller=Home}/{action=Index}/{id?}");
             //template: "{controller=Records}/{action=Index}/{id?}");
+            //template: "{controller=Records}/{action=Index}");
             template: "{controller=Records}/{action=Index}");
         });
         }

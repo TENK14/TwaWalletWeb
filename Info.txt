@@ -39,3 +39,9 @@ https://social.msdn.microsoft.com/Forums/vstudio/en-US/d84f968d-ede6-4c9d-b9d1-3
 
 
  https://docs.microsoft.com/en-us/aspnet/mvc/overview/security/create-an-aspnet-mvc-5-web-app-with-email-confirmation-and-password-reset
+
+ Razor:
+ ASP.NET Core MVC with EF Core - Sort, Filter, Paging - 3 of 10
+ https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/sort-filter-page?view=aspnetcore-2.0
+ Partial Views in ASP.NET Core
+ https://docs.microsoft.com/cs-cz/aspnet/core/mvc/views/partial?view=aspnetcore-2.0

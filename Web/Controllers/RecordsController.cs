@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using TwaWallet.Entity;
 using TwaWallet.Model;
 using TwaWallet.Web.DataLayer;
+using TwaWallet.Web.Models.Record;
 
 namespace TwaWallet.Web.Controllers
 {
@@ -39,12 +40,58 @@ namespace TwaWallet.Web.Controllers
             _userManager = userManager;
             _dataLayer = dataLayer;
         }
-        
-        // GET: Records
-        public async Task<IActionResult> Index()
+
+        //// GET: Records
+        //public async Task<IActionResult> Index()
+        //{
+        //    //var applicationDbContext = GetUsersRecords();
+        //    var records = _dataLayer.GetUserRecords();
+
+        //    if (records == null
+        //        || !records.Any())
+        //    {
+        //        //return NotFound();
+        //    }
+
+        //    _dataLayer.Load(records, r => r.Category);
+        //    _dataLayer.Load(records, r => r.PaymentType);
+
+        //    return View(await records.ToListAsync());
+
+        //}
+
+        //GET: Records
+        public async Task<IActionResult> Index(DateTime? dateFrom, DateTime? dateTo, string searchString)
         {
-            //var applicationDbContext = GetUsersRecords();
+            //ViewData["DateFrom"] = dateFrom;
+            //ViewData["DateTo"] = dateTo;
+            //ViewData["CurrentFilter"] = searchString;
+            ViewBag.DateFrom = dateFrom.HasValue ? dateFrom.Value.Date : (DateTime?)null;
+            ViewBag.DateTo = dateTo.HasValue? dateTo.Value.Date : (DateTime?)null;
+            ViewBag.CurrentFilter = searchString;
+
             var records = _dataLayer.GetUserRecords();
+
+            if (dateFrom != null)
+            {
+                records = records.Where(r => r.Date >= dateFrom);
+            }
+
+            if (dateTo != null)
+            {
+                records = records.Where(r => r.Date <= dateTo);
+            }
+
+            _dataLayer.Load(records, r => r.Category);
+            _dataLayer.Load(records, r => r.PaymentType);
+
+            if (!String.IsNullOrWhiteSpace(searchString))
+            {
+                records = records.Where(r => r.Description.Contains(searchString)
+                || r.Tag.Contains(searchString)
+                || r.Category.Description.Contains(searchString)
+                || r.PaymentType.Description.Contains(searchString));
+            }
 
             if (records == null
                 || !records.Any())
@@ -52,13 +99,65 @@ namespace TwaWallet.Web.Controllers
                 //return NotFound();
             }
 
+            var list = await records.ToListAsync();
+            ViewBag.List = list;
+
+            return View(list);
+
+        }
+
+
+        // Partial Views
+        //public async Task<IActionResult> Index2([Bind("DateFrom,DateTo,CurrentFilter")]FilterIM filterIM)
+        public async Task<IActionResult> Index2([Bind("DateFrom,DateTo,SearchString")]FilterIM filterIM)
+
+
+        {
+            ViewBag.Filter = filterIM;
+            //ViewData["DateFrom"] = filterIM.DateFrom;
+            //ViewData["DateTo"] = filterIM.DateTo;
+            //ViewData["CurrentFilter"] = filterIM.SearchString;
+
+            ViewBag.DateFrom = filterIM.DateFrom;
+            ViewBag.DateTo = filterIM.DateTo;
+            ViewBag.CurrentFilter = filterIM.SearchString;
+
+            var records = _dataLayer.GetUserRecords();
+
+            if (filterIM.DateFrom != null)
+            {
+                records = records.Where(r => r.Date >= filterIM.DateFrom);
+            }
+
+            if (filterIM.DateTo != null)
+            {
+                records = records.Where(r => r.Date <= filterIM.DateTo);
+            }
+
             _dataLayer.Load(records, r => r.Category);
             _dataLayer.Load(records, r => r.PaymentType);
 
-            return View(await records.ToListAsync());
+            if (!String.IsNullOrWhiteSpace(filterIM.SearchString))
+            {
+                records = records.Where(r => r.Description.Contains(filterIM.SearchString)
+                || r.Tag.Contains(filterIM.SearchString)
+                || r.Category.Description.Contains(filterIM.SearchString)
+                || r.PaymentType.Description.Contains(filterIM.SearchString));
+            }
+
+            if (records == null
+                || !records.Any())
+            {
+                //return NotFound();
+            }
+
+            var list = await records.ToListAsync();
+            ViewBag.List = list;
+
+            return View(list);
 
         }
-        
+
         // GET: Records/Details/5
         public async Task<IActionResult> Details(string id)
         {

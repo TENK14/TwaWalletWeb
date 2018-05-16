@@ -1,0 +1,112 @@
+﻿@model IEnumerable<TwaWallet.Model.Record>
+
+@{
+    ViewData["Title"] = "Index2";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<style>
+        table.table {
+            /*width: 100%;
+            height:200px;*/
+            /* width: 100%; */ /* Optional */
+            /* border-collapse: collapse; */
+            border-spacing: 0;
+            border: 2px solid black;
+        }
+
+            table.scroll tbody,
+            table.scroll thead {
+                display: block;
+            }
+
+        thead tr th {
+            height: 30px;
+            line-height: 30px;
+            /* text-align: left; */
+        }
+
+        table.table tbody {
+            height: 100px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        tbody {
+            border-top: 2px solid black;
+        }
+
+            tbody td, thead th {
+                /* width: 20%; */ /* Optional */
+                border-right: 1px solid black;
+                /* white-space: nowrap; */
+            }
+
+                tbody td:last-child, thead th:last-child {
+                    border-right: none;
+                }
+    </style>*@
+
+@*<style>
+        table.scroll {
+            /*width: 100%;
+            height:200px;*/
+            /* width: 100%; */ /* Optional */
+            /* border-collapse: collapse; */
+            border-spacing: 0;
+            border: 2px solid black;
+        }
+
+            table.scroll tbody,
+            table.scroll thead {
+                display: block;
+            }
+
+        thead tr th {
+            height: 30px;
+            line-height: 30px;
+            /* text-align: left; */
+        }
+
+        table.scroll tbody {
+            height: 100px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        tbody {
+            border-top: 2px solid black;
+        }
+
+            tbody td, thead th {
+                /* width: 20%; */ /* Optional */
+                border-right: 1px solid black;
+                /* white-space: nowrap; */
+            }
+
+                tbody td:last-child, thead th:last-child {
+                    border-right: none;
+                }
+    </style>*@
+
+<h2>Index2</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+    @*<a asp-action="Create2">Create New</a>*@
+</p>
+
+<div>
+    @*@{Html.RenderPartial("IndexFilter", ViewBag.filter);}*@
+    @*@await Html.PartialAsync("IndexFilter", ViewBag.filter)*@
+    @await Html.PartialAsync("IndexFilter", (TwaWallet.Web.Models.Record.FilterIM) ViewBag.Filter)
+</div>
+<div>
+    @*@{Html.RenderPartial("IndexList", ViewBag.list);}*@
+    @*@await Html.PartialAsync("IndexList", ViewBag.list)*@
+    @await Html.PartialAsync("IndexList", (IEnumerable<TwaWallet.Model.Record>) ViewBag.List)
+</div>
+@*or*@
+@*@{Html.RenderPartial("login", Model.LoginViewModel)}
+@{Html.RenderPartial("register", Model.RegisterViewModel)}*@
+
