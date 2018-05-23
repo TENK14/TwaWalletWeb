@@ -61,7 +61,7 @@ namespace TwaWallet.Web.Controllers
         //}
 
         //GET: Records
-        public async Task<IActionResult> Index(DateTime? dateFrom, DateTime? dateTo, string searchString)
+        public async Task<IActionResult> Index(DateTime? dateFrom, DateTime? dateTo, string searchString, bool earnings = false)
         {
             //ViewData["DateFrom"] = dateFrom;
             //ViewData["DateTo"] = dateTo;
@@ -69,6 +69,7 @@ namespace TwaWallet.Web.Controllers
             ViewBag.DateFrom = dateFrom.HasValue ? dateFrom.Value.Date : (DateTime?)null;
             ViewBag.DateTo = dateTo.HasValue? dateTo.Value.Date : (DateTime?)null;
             ViewBag.CurrentFilter = searchString;
+            ViewBag.Earnings = earnings;
 
             var records = _dataLayer.GetUserRecords();
 
@@ -100,6 +101,21 @@ namespace TwaWallet.Web.Controllers
             }
 
             var list = await records.ToListAsync();
+            //var list = await records.Select(r => { (r.Earnings == true ? r.Cost = r.Cost : r.Cost = 0 - r.Cost); return r; }).ToListAsync();
+
+            if (!ViewBag.Earnings)
+            {
+                list = list.Where(r => !r.Earnings).ToList();
+            }
+
+            foreach (var item in list)
+            {
+                if (!item.Earnings)
+                {
+                    item.Cost = 0 - item.Cost;
+                }
+            }
+
             ViewBag.List = list;
 
             return View(list);

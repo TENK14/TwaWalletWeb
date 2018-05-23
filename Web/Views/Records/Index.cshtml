@@ -96,25 +96,30 @@
     @*<a asp-action="Create2">Create New</a>*@
 </p>
 
-<form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Find by name: @*<input type="text" name="SearchString" value="@ViewData["currentFilter"]" />*@
-            <p  class="visible-lg-inline-block">Hledej: </p><input class="visible-lg-inline-block" type="text" name="SearchString" value="@ViewBag.CurrentFilter" />
+<span>
+    <form asp-action="Index" method="get">
+        <div class="form-actions no-color">
+            <span @*class="visible-lg-inline-block" *@>Hledej: </span>
+            <input @*class="visible-lg-inline-block" *@ type="text" name="SearchString" value="@ViewBag.CurrentFilter" />
             <br />
-            @*<input asp-for="Date" class="form-control" />*@
-            @*<input type="Date" class="form-control" name="DateFrom" value="@ViewData["dateFrom"]" />*@
-            <p  class="visible-lg-inline-block">Od: </p><input type="Date" class="visible-lg-inline-block" name="DateFrom" value="@ViewBag.DateFrom?.Date?.ToString("yyyy-MM-dd")" />
-            @*@Html.TextBoxFor(@ViewBag.DateFrom, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })*@
-            @*@Html.EditorFor(@ViewBag.DateFrom, )*@
-            @*<input type="Date" class="form-control" name="DateTo" value="@ViewData["dateTo"]" />*@
-            <p class="visible-lg-inline-block">Do: </p><input type="Date" class="visible-lg-inline-block" name="DateTo" value="@ViewBag.DateTo?.ToString("yyyy-MM-dd")" />
+            <span @*class="visible-lg-inline-block" *@>Od: </span>
+            <input type="Date" @*class="visible-lg-inline-block" *@ name="DateFrom" value="@ViewBag.DateFrom?.Date?.ToString("yyyy-MM-dd")" />
+            <span @*class="visible-lg-inline-block" *@>Do: </span>
+            <input type="Date" @*class="visible-lg-inline-block" *@ name="DateTo" value="@ViewBag.DateTo?.ToString("yyyy-MM-dd")" />
             <br />
-            <input type="submit" value="Search" class="btn btn-default" /> |
-            <a asp-action="Index">Back to Full List</a>
-        </p>
-    </div>
-</form>
+            <span>Earnings: </span>
+            <input type="checkbox" name="Earnings" value="true" checked="@ViewBag.Earnings" />
+            <input type="submit" value="Search" class="btn btn-default" />
+            <br />
+        </div>
+    </form>
+</span>
+<div>
+    <label>Počet položek: </label>
+    <span>@Model.Count()</span>
+    <label>Celková cena: </label>
+    <span>@Model.Sum(m => m.Cost)</span>
+</div>
 
 
 @*<table class="table">*@
