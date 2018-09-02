@@ -66,6 +66,19 @@ namespace TwaWallet.Web.Controllers
             //ViewData["DateFrom"] = dateFrom;
             //ViewData["DateTo"] = dateTo;
             //ViewData["CurrentFilter"] = searchString;
+
+            if (!dateFrom.HasValue)
+            {
+                var today = DateTime.Now.Date;
+                dateFrom = new DateTime(today.Year, today.Month, 1);
+            }
+
+            if (!dateTo.HasValue)
+            {
+                var today = DateTime.Now.Date;
+                dateTo = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
+            }
+
             ViewBag.DateFrom = dateFrom.HasValue ? dateFrom.Value.Date : (DateTime?)null;
             ViewBag.DateTo = dateTo.HasValue? dateTo.Value.Date : (DateTime?)null;
             ViewBag.CurrentFilter = searchString;
@@ -377,6 +390,15 @@ namespace TwaWallet.Web.Controllers
             _context.Records.Remove(record);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        //https://stackoverflow.com/questions/20766306/calling-a-c-sharp-function-by-a-html-button-in-asp-net-razor
+        //https://www.codeproject.com/Questions/316663/How-to-add-event-handler-to-a-button-in-mvc-razo
+        public ActionResult ExportClick()
+        {
+            string message = "Welcome";
+            //return new JsonResult( { Data = message, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return new JsonResult(message);
         }
 
         //private bool RecordExists(string id)

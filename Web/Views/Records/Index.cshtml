@@ -92,8 +92,11 @@
 <h2>Index</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
-    @*<a asp-action="Create2">Create New</a>*@
+    <div >
+        @*@Html.ActionLink("text of link", "Action", "Controller", new { Style = "color:Green" }, null)*@
+        <a asp-action="Create">Create New</a>
+        @*<a asp-action="Create2">Create New</a>*@
+    </div>
 </p>
 
 <span>
@@ -113,6 +116,10 @@
             <br />
         </div>
     </form>
+    @*https://www.tuomistolari.net/blog/2013/10/24/razor-sharp-csv-generation.html*@
+    @*https://docs.microsoft.com/en-us/aspnet/core/mvc/views/razor?view=aspnetcore-2.1*@
+    @*https://stackoverflow.com/questions/33431282/asp-net-mvc-proper-usage-of-view-model-and-command-pattern*@
+    @*<button type="button" name="btnExport" onclick="exportClick" value="Export" />*@
 </span>
 <div>
     <label>Počet položek: </label>

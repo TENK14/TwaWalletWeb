@@ -32,6 +32,7 @@ namespace TwaWallet.Model
         public Category Category { get; set; }
 
         [DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{dd.MM.yyyy}")]
         //[DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
         //[DisplayFormat(DataFormatString = "{dd.MM.yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; } = DateTime.Now;
