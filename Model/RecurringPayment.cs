@@ -51,14 +51,17 @@ namespace TwaWallet.Model
         public string Tag { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
         public DateTime DateCreated { get; set; } = DateTime.Now;
 
+        [DataType(DataType.Date)]
         public DateTime LastUpdate { get; set; } = DateTime.Now.AddDays(-60);
         public bool IsActive { get; set; } = true;
 
         /// <summary>
         /// Do kdy se budou trvalé platby generovat
         /// </summary>
+        [DataType(DataType.Date)]
         public DateTime? EndDate { get; set; }
 
         //public RecurringPayment IncludeObjects(IDataContext db)

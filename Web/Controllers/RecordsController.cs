@@ -18,9 +18,10 @@ namespace TwaWallet.Web.Controllers
     //[Route("[controller]/[action]")]
     public class RecordsController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IDataLayer _dataLayer;
+        private readonly ApplicationDbContext context;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly IDataLayer dataLayer;
+        //private readonly ApplicationUser user;
 
         public int MyProperty { get; set; }
 
@@ -28,7 +29,7 @@ namespace TwaWallet.Web.Controllers
         {
             get
             {
-                return _userManager.GetUserAsync(User).Result;
+                return userManager.GetUserAsync(User).Result;
             }
         }
 
@@ -36,9 +37,14 @@ namespace TwaWallet.Web.Controllers
             UserManager<ApplicationUser> userManager,
             IDataLayer dataLayer)
         {
-            _context = context;
-            _userManager = userManager;
-            _dataLayer = dataLayer;
+            this.context = context;
+            this.userManager = userManager;
+            this.dataLayer = dataLayer;
+
+            //if (User != null)
+            //{
+            //    this.user = userManager.GetUserAsync(User).Result;
+            //}
         }
 
         //// GET: Records
@@ -84,7 +90,7 @@ namespace TwaWallet.Web.Controllers
             ViewBag.CurrentFilter = searchString;
             ViewBag.Earnings = earnings;
 
-            var records = _dataLayer.GetUserRecords();
+            var records = dataLayer.GetUserRecords(ApplicationUser);
 
             if (dateFrom != null)
             {
@@ -96,8 +102,8 @@ namespace TwaWallet.Web.Controllers
                 records = records.Where(r => r.Date <= dateTo);
             }
 
-            _dataLayer.Load(records, r => r.Category);
-            _dataLayer.Load(records, r => r.PaymentType);
+            dataLayer.Load(records, r => r.Category);
+            dataLayer.Load(records, r => r.PaymentType);
 
             if (!String.IsNullOrWhiteSpace(searchString))
             {
@@ -151,7 +157,7 @@ namespace TwaWallet.Web.Controllers
             ViewBag.DateTo = filterIM.DateTo;
             ViewBag.CurrentFilter = filterIM.SearchString;
 
-            var records = _dataLayer.GetUserRecords();
+            var records = dataLayer.GetUserRecords(ApplicationUser);
 
             if (filterIM.DateFrom != null)
             {
@@ -163,8 +169,8 @@ namespace TwaWallet.Web.Controllers
                 records = records.Where(r => r.Date <= filterIM.DateTo);
             }
 
-            _dataLayer.Load(records, r => r.Category);
-            _dataLayer.Load(records, r => r.PaymentType);
+            dataLayer.Load(records, r => r.Category);
+            dataLayer.Load(records, r => r.PaymentType);
 
             if (!String.IsNullOrWhiteSpace(filterIM.SearchString))
             {
@@ -195,15 +201,15 @@ namespace TwaWallet.Web.Controllers
                 return NotFound();
             }
 
-            var record = _dataLayer.GetUserRecord(id);
+            var record = dataLayer.GetUserRecord(ApplicationUser, id);
 
             if (record == null)
             {
                 return NotFound();
             }
 
-            _dataLayer.Load(new List<Record> { record }, r => r.Category);
-            _dataLayer.Load(new List<Record> { record }, r => r.PaymentType);
+            dataLayer.Load(new List<Record> { record }, r => r.Category);
+            dataLayer.Load(new List<Record> { record }, r => r.PaymentType);
 
             return View(record);
         }
@@ -213,10 +219,10 @@ namespace TwaWallet.Web.Controllers
         {
             var record = new Record();
 
-            ViewBag.CategoryId = new SelectList(_dataLayer.GetUserCategories().OrderByDescending(c => c.IsDefault), $"{nameof(Category.Id)}", $"{nameof(Category.Description)}");
+            ViewBag.CategoryId = new SelectList(dataLayer.GetUserCategories(ApplicationUser).OrderByDescending(c => c.IsDefault), $"{nameof(Category.Id)}", $"{nameof(Category.Description)}");
             // alternativa
             //ViewData["CategoryId"] = new SelectList(_dataLayer.GetUserCategories().OrderByDescending(c => c.IsDefault), $"{nameof(Category.Id)}", $"{nameof(Category.Description)}");
-            ViewBag.PaymentTypeId = new SelectList(_dataLayer.GetUserPaymentTypes().OrderByDescending(p => p.IsDefault), $"{nameof(PaymentType.Id)}", $"{nameof(PaymentType.Description)}");
+            ViewBag.PaymentTypeId = new SelectList(dataLayer.GetUserPaymentTypes(ApplicationUser).OrderByDescending(p => p.IsDefault), $"{nameof(PaymentType.Id)}", $"{nameof(PaymentType.Description)}");
 
             ViewBag.Date = DateTime.Now;
 
@@ -253,18 +259,18 @@ namespace TwaWallet.Web.Controllers
                     && ModelState.GetValidationState(nameof(Record.ApplicationUserId)) == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid)
                     )
             {
-                var user = await _userManager.GetUserAsync(User);
+                var user = await userManager.GetUserAsync(User);
 
                 recordIM.ApplicationUser = user;
 
-                _context.Add(recordIM);
-                await _context.SaveChangesAsync();
+                context.Add(recordIM);
+                await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             //ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", $"{nameof(ApplicationUser.UserName)}");
             
-            ViewData["CategoryId"] = new SelectList(_dataLayer.GetUserCategories(), "Id", $"{nameof(Category.Description)}", recordIM.Category);
-            ViewData["PaymentTypeId"] = new SelectList(_dataLayer.GetUserPaymentTypes(), "Id", $"{nameof(PaymentType.Description)}");
+            ViewData["CategoryId"] = new SelectList(dataLayer.GetUserCategories(ApplicationUser), "Id", $"{nameof(Category.Description)}", recordIM.Category);
+            ViewData["PaymentTypeId"] = new SelectList(dataLayer.GetUserPaymentTypes(ApplicationUser), "Id", $"{nameof(PaymentType.Description)}");
             ViewBag.Date = DateTime.Now;
             ViewBag.Warranty = 0;
 
@@ -279,18 +285,18 @@ namespace TwaWallet.Web.Controllers
                 return NotFound();
             }
 
-            var record = _dataLayer.GetUserRecord(id);
+            var record = dataLayer.GetUserRecord(ApplicationUser, id);
             if (record == null)
             {
                 return NotFound();
             }
 
-            _dataLayer.Load(new List<Record> { record }, r => r.Category);
-            _dataLayer.Load(new List<Record> { record }, r => r.PaymentType);
+            dataLayer.Load(new List<Record> { record }, r => r.Category);
+            dataLayer.Load(new List<Record> { record }, r => r.PaymentType);
 
             //ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id", record.ApplicationUserId);
-            ViewData["CategoryId"] = new SelectList(_dataLayer.GetUserCategories(), "Id", $"{nameof(Category.Description)}", record.CategoryId);
-            ViewData["PaymentTypeId"] = new SelectList(_dataLayer.GetUserPaymentTypes(), "Id", $"{nameof(PaymentType.Description)}", record.PaymentTypeId);
+            ViewData["CategoryId"] = new SelectList(dataLayer.GetUserCategories(ApplicationUser), "Id", $"{nameof(Category.Description)}", record.CategoryId);
+            ViewData["PaymentTypeId"] = new SelectList(dataLayer.GetUserPaymentTypes(ApplicationUser), "Id", $"{nameof(PaymentType.Description)}", record.PaymentTypeId);
             ViewData["Date"] = record.Date;
             return View(record);
         }
@@ -314,7 +320,7 @@ namespace TwaWallet.Web.Controllers
             {
                 try
                 {
-                    var record = _dataLayer.GetUserRecord(id);
+                    var record = dataLayer.GetUserRecord(ApplicationUser, id);
                     
                     if (record == null)
                     {
@@ -332,12 +338,12 @@ namespace TwaWallet.Web.Controllers
                     record.Tag = recordIM.Tag;
                     record.Warranty = recordIM.Warranty;
 
-                    _context.Update(record);
-                    await _context.SaveChangesAsync();
+                    context.Update(record);
+                    await context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_dataLayer.UserRecordExists(recordIM.Id))
+                    if (!dataLayer.UserRecordExists(ApplicationUser, recordIM.Id))
                     {
                         return NotFound();
                     }
@@ -349,8 +355,8 @@ namespace TwaWallet.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
             //ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id", record.ApplicationUserId);
-            ViewData["CategoryId"] = new SelectList(_dataLayer.GetUserCategories(), "Id", $"{nameof(Category.Description)}", recordIM.CategoryId);
-            ViewData["PaymentTypeId"] = new SelectList(_dataLayer.GetUserPaymentTypes(), "Id", $"{nameof(PaymentType.Description)}", recordIM.PaymentTypeId);
+            ViewData["CategoryId"] = new SelectList(dataLayer.GetUserCategories(ApplicationUser), "Id", $"{nameof(Category.Description)}", recordIM.CategoryId);
+            ViewData["PaymentTypeId"] = new SelectList(dataLayer.GetUserPaymentTypes(ApplicationUser), "Id", $"{nameof(PaymentType.Description)}", recordIM.PaymentTypeId);
             return View(recordIM);
         }
 
@@ -362,15 +368,15 @@ namespace TwaWallet.Web.Controllers
                 return NotFound();
             }
 
-            var record = _dataLayer.GetUserRecord(id);
+            var record = dataLayer.GetUserRecord(ApplicationUser, id);
             if (record == null)
             {
                 return NotFound();
             }
 
             //dataLoader.Load(productType, pt => pt.Segment);
-            _dataLayer.Load(new List<Record> { record }, r => r.Category);
-            _dataLayer.Load(new List<Record> { record }, r => r.PaymentType);
+            dataLayer.Load(new List<Record> { record }, r => r.Category);
+            dataLayer.Load(new List<Record> { record }, r => r.PaymentType);
 
             return View(record);
         }
@@ -380,15 +386,15 @@ namespace TwaWallet.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var record = _dataLayer.GetUserRecord(id);
+            var record = dataLayer.GetUserRecord(ApplicationUser, id);
 
             if (record == null)
             {
                 return NotFound();
             }
 
-            _context.Records.Remove(record);
-            await _context.SaveChangesAsync();
+            context.Records.Remove(record);
+            await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

@@ -29,9 +29,9 @@ namespace TwaWallet.Web.Controllers
         // GET: PaymentTypes
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = await GetUsersPaymentTypes();
+            var paymentTypes = await GetUsersPaymentTypes();
 
-            return View(await applicationDbContext.ToListAsync());
+            return View(await paymentTypes.ToListAsync());
         }
 
         // GET: PaymentTypes/Details/5
