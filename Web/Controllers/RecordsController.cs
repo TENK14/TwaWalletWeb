@@ -18,10 +18,8 @@ namespace TwaWallet.Web.Controllers
     //[Route("[controller]/[action]")]
     public class RecordsController : Controller
     {
-        private readonly ApplicationDbContext context;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IDataLayer dataLayer;
-        //private readonly ApplicationUser user;
 
         public int MyProperty { get; set; }
 
@@ -33,11 +31,10 @@ namespace TwaWallet.Web.Controllers
             }
         }
 
-        public RecordsController(ApplicationDbContext context,
+        public RecordsController(
             UserManager<ApplicationUser> userManager,
             IDataLayer dataLayer)
         {
-            this.context = context;
             this.userManager = userManager;
             this.dataLayer = dataLayer;
 
@@ -214,11 +211,8 @@ namespace TwaWallet.Web.Controllers
             return View(record);
         }
 
-        // GET: Records/Create
-        public IActionResult Create()
+        public IActionResult SetCreate(Record record)
         {
-            var record = new Record();
-
             ViewBag.CategoryId = new SelectList(dataLayer.GetUserCategories(ApplicationUser).OrderByDescending(c => c.IsDefault), $"{nameof(Category.Id)}", $"{nameof(Category.Description)}");
             // alternativa
             //ViewData["CategoryId"] = new SelectList(_dataLayer.GetUserCategories().OrderByDescending(c => c.IsDefault), $"{nameof(Category.Id)}", $"{nameof(Category.Description)}");
@@ -227,6 +221,22 @@ namespace TwaWallet.Web.Controllers
             ViewBag.Date = DateTime.Now;
 
             return View(record);
+        }
+
+        // GET: Records/Create
+        public IActionResult Create()
+        {
+            var record = new Record();
+            return SetCreate(record);
+
+            //ViewBag.CategoryId = new SelectList(dataLayer.GetUserCategories(ApplicationUser).OrderByDescending(c => c.IsDefault), $"{nameof(Category.Id)}", $"{nameof(Category.Description)}");
+            //// alternativa
+            ////ViewData["CategoryId"] = new SelectList(_dataLayer.GetUserCategories().OrderByDescending(c => c.IsDefault), $"{nameof(Category.Id)}", $"{nameof(Category.Description)}");
+            //ViewBag.PaymentTypeId = new SelectList(dataLayer.GetUserPaymentTypes(ApplicationUser).OrderByDescending(p => p.IsDefault), $"{nameof(PaymentType.Id)}", $"{nameof(PaymentType.Description)}");
+
+            //ViewBag.Date = DateTime.Now;
+
+            //return View(record);
         }
 
         // GET: Records/Create
@@ -263,8 +273,7 @@ namespace TwaWallet.Web.Controllers
 
                 recordIM.ApplicationUser = user;
 
-                context.Add(recordIM);
-                await context.SaveChangesAsync();
+                dataLayer.AddAsync(recordIM);
                 return RedirectToAction(nameof(Index));
             }
             //ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", $"{nameof(ApplicationUser.UserName)}");
@@ -338,8 +347,7 @@ namespace TwaWallet.Web.Controllers
                     record.Tag = recordIM.Tag;
                     record.Warranty = recordIM.Warranty;
 
-                    context.Update(record);
-                    await context.SaveChangesAsync();
+                    dataLayer.UpdateAsync(record);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -393,8 +401,8 @@ namespace TwaWallet.Web.Controllers
                 return NotFound();
             }
 
-            context.Records.Remove(record);
-            await context.SaveChangesAsync();
+            dataLayer.DeleteAsync(record);
+
             return RedirectToAction(nameof(Index));
         }
 

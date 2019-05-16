@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TwaWallet.Entity;
 using TwaWallet.Model;
+using TwaWallet.Web.Controllers;
 using TwaWallet.Web.DataLayer;
 using TwaWallet.Web.Models.RecurringPaymentViewModels;
 
@@ -251,6 +252,65 @@ namespace Web.Controllers
             await dataLayer.DeleteAsync(recurringPayment);
 
             return RedirectToAction(nameof(Index));
+        }
+
+
+        public async Task<IActionResult> GeneratePayment(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var recurringPayment = dataLayer.GetUserRecurringPayment(ApplicationUser, id);
+            if (recurringPayment == null)
+            {
+                return NotFound();
+            }
+
+            var categories = dataLayer.GetUserCategories(ApplicationUser).OrderByDescending(c => c.IsDefault);
+            var intervals = dataLayer.GetIntervals().OrderByDescending(c => c.IsDefault);
+            var paymentTypes = dataLayer.GetUserPaymentTypes(ApplicationUser).OrderByDescending(c => c.IsDefault);
+
+            ViewBag.CategoryId = new SelectList(categories, $"{nameof(Category.Id)}", $"{nameof(Category.Description)}", recurringPayment.CategoryId);
+            ViewBag.IntervalId = new SelectList(intervals, $"{nameof(Interval.Id)}", $"{nameof(Interval.Description)}", recurringPayment.IntervalId);
+            ViewBag.PaymentTypeId = new SelectList(paymentTypes, $"{nameof(PaymentType.Id)}", $"{nameof(PaymentType.Description)}", recurringPayment.PaymentTypeId);
+
+            var recurringPaymentVM = new RecurringPaymentViewModel();
+            ModelToVm(recurringPayment, recurringPaymentVM, intervals.ToList());
+
+            var record = new TwaWallet.Model.Record
+            {
+                ApplicationUser = await userManager.GetUserAsync(User),
+                CategoryId = recurringPayment.CategoryId,
+                Cost = recurringPayment.Cost,
+                Date = DateTime.Now,
+                Description = recurringPayment.Description,
+                Earnings = recurringPayment.Earnings,
+                PaymentTypeId = recurringPayment.PaymentTypeId,
+                Tag = recurringPayment.Tag,
+                Warranty = recurringPayment.Warranty
+            };
+            await dataLayer.AddAsync(record);
+            return RedirectToAction(nameof(Index));
+            //return RedirectToAction(nameof(Index), "Records");
+
+            //return RedirectToAction("Create", "Records", new TwaWallet.Model.Record
+            //{
+            //    //ApplicationUserId = Model.apli,
+            //    CategoryId = recurringPayment.CategoryId,
+            //    Cost = recurringPayment.Cost,
+            //    Date = DateTime.Now.AddDays(-2),
+            //    Description = recurringPayment.Description,
+            //    Earnings = recurringPayment.Earnings,
+            //    PaymentTypeId = recurringPayment.PaymentTypeId,
+            //    Tag = recurringPayment.Tag,
+            //    Warranty = recurringPayment.Warranty
+            //});
+
+            //return new RecordsController(userManager, dataLayer).SetCreate(record);
+
+            //return View(recurringPaymentVM);
         }
 
         private bool RecurringPaymentExists(string id)

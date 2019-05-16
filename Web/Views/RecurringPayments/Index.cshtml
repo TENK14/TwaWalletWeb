@@ -102,9 +102,17 @@
                 @Html.DisplayFor(modelItem => item.PaymentTypeDescription)
             </td>
             <td>
+                <p>
+                    <a asp-action="GeneratePayment" asp-route-id="@item.Id">Generate payment</a>
+                </p>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
+                @*@{
+            //Response.Redirect("~/Records/Create");
+            @Html.ActionLink("Create", "Records");
+        }*@
             </td>
         </tr>
 }

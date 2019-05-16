@@ -101,4 +101,46 @@
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
+    @*<a asp-action="Create" asp-route-id="@{
+        new TwaWallet.Model.Record
+        {
+            //ApplicationUserId = Model.apli,
+            CategoryId = Model.CategoryId,
+            Cost = Model.Cost,
+            Date = DateTime.Now,
+            Description = Model.Description,
+            Earnings = Model.Earnings,
+            PaymentTypeId = Model.PaymentTypeId,
+            Tag = Model.Tag,
+            Warranty = Model.Warranty
+        };
+        }">Create extra payment</a>*@
+
+    @*@Html.ActionLink("Link Name", "Create", "Records", null, new TwaWallet.Model.Record
+            {
+                //ApplicationUserId = Model.apli,
+                CategoryId = Model.CategoryId,
+                Cost = Model.Cost,
+                Date = DateTime.Now.AddDays(-2),
+                Description = Model.Description,
+                Earnings = Model.Earnings,
+                PaymentTypeId = Model.PaymentTypeId,
+                Tag = Model.Tag,
+        Warranty = Model.Warranty
+        })*@
+<p>
+    <a asp-action="GeneratePayment" asp-route-id="@Model.Id">Generate payment</a>
+    @*@{
+        //Response.Redirect("~/Records/Create");
+        @Html.ActionLink("Create", "Records");
+    }*@
+</p>
+    @*
+    Use the overloads that take the controller name too...
+
+    return RedirectToAction("Index", "MyController");
+    and
+
+    @Html.ActionLink("Link Name", "Index", "MyController", null, null)
+    *@
 </div>
