@@ -83,7 +83,7 @@ namespace TwaWallet.Web.Controllers
             }
 
             ViewBag.DateFrom = dateFrom.HasValue ? dateFrom.Value.Date : (DateTime?)null;
-            ViewBag.DateTo = dateTo.HasValue? dateTo.Value.Date : (DateTime?)null;
+            ViewBag.DateTo = dateTo.HasValue ? dateTo.Value.Date : (DateTime?)null;
             ViewBag.CurrentFilter = searchString;
             ViewBag.Earnings = earnings;
 
@@ -273,7 +273,7 @@ namespace TwaWallet.Web.Controllers
 
                 recordIM.ApplicationUser = user;
 
-                dataLayer.AddAsync(recordIM);
+                await dataLayer.AddAsync(recordIM);
                 return RedirectToAction(nameof(Index));
             }
             //ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", $"{nameof(ApplicationUser.UserName)}");
@@ -347,7 +347,7 @@ namespace TwaWallet.Web.Controllers
                     record.Tag = recordIM.Tag;
                     record.Warranty = recordIM.Warranty;
 
-                    dataLayer.UpdateAsync(record);
+                    await dataLayer.UpdateAsync(record);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -401,7 +401,7 @@ namespace TwaWallet.Web.Controllers
                 return NotFound();
             }
 
-            dataLayer.DeleteAsync(record);
+            await dataLayer.DeleteAsync(record);
 
             return RedirectToAction(nameof(Index));
         }
