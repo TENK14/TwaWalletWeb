@@ -223,6 +223,10 @@
     <Compile Include="Migrations\20180408190013_Init.designer.cs">
       <DependentUpon>20180408190013_Init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20221113202256_Record-add_indexes.cs" />
+    <Compile Include="Migrations\20221113202256_Record-add_indexes.designer.cs">
+      <DependentUpon>20221113202256_Record-add_indexes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\ApplicationDbContextModelSnapshot.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

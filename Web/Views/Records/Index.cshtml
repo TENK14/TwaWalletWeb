@@ -5,97 +5,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@*<style>
-        table.table {
-            /*width: 100%;
-            height:200px;*/
-            /* width: 100%; */ /* Optional */
-            /* border-collapse: collapse; */
-            border-spacing: 0;
-            border: 2px solid black;
-        }
-
-            table.scroll tbody,
-            table.scroll thead {
-                display: block;
-            }
-
-        thead tr th {
-            height: 30px;
-            line-height: 30px;
-            /* text-align: left; */
-        }
-
-        table.table tbody {
-            height: 100px;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-
-        tbody {
-            border-top: 2px solid black;
-        }
-
-            tbody td, thead th {
-                /* width: 20%; */ /* Optional */
-                border-right: 1px solid black;
-                /* white-space: nowrap; */
-            }
-
-                tbody td:last-child, thead th:last-child {
-                    border-right: none;
-                }
-    </style>*@
-
-@*<style>
-        table.scroll {
-            /*width: 100%;
-            height:200px;*/
-            /* width: 100%; */ /* Optional */
-            /* border-collapse: collapse; */
-            border-spacing: 0;
-            border: 2px solid black;
-        }
-
-            table.scroll tbody,
-            table.scroll thead {
-                display: block;
-            }
-
-        thead tr th {
-            height: 30px;
-            line-height: 30px;
-            /* text-align: left; */
-        }
-
-        table.scroll tbody {
-            height: 100px;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-
-        tbody {
-            border-top: 2px solid black;
-        }
-
-            tbody td, thead th {
-                /* width: 20%; */ /* Optional */
-                border-right: 1px solid black;
-                /* white-space: nowrap; */
-            }
-
-                tbody td:last-child, thead th:last-child {
-                    border-right: none;
-                }
-    </style>*@
-
-<h2>Index</h2>
+<h2>Records</h2>
 
 <p>
     <div >
-        @*@Html.ActionLink("text of link", "Action", "Controller", new { Style = "color:Green" }, null)*@
         <a asp-action="Create">Create New</a>
-        @*<a asp-action="Create2">Create New</a>*@
     </div>
 </p>
 
@@ -104,11 +18,17 @@
         <div class="form-actions no-color">
             <span @*class="visible-lg-inline-block" *@>Hledej: </span>
             <input @*class="visible-lg-inline-block" *@ type="text" name="SearchString" value="@ViewBag.CurrentFilter" />
+            @*<div class="form-group">
+                <label asp-for="PaymentTypeId" class="control-label">Payment type</label>
+                <select asp-for="PaymentTypeId" class="form-control" asp-items="@ViewBag.PaymentTypeId"></select>
+            </div>*@
+            @*<span asp-for="PaymentTypeId" class="control-label">Payment type</span>*@
+            @*<select asp-for="PaymentTypeId" class="form-control" asp-items="@ViewBag.PaymentTypeId"></select>*@
             <br />
-            <span @*class="visible-lg-inline-block" *@>Od: </span>
-            <input type="Date" @*class="visible-lg-inline-block" *@ name="DateFrom" value="@ViewBag.DateFrom?.Date?.ToString("yyyy-MM-dd")" />
-            <span @*class="visible-lg-inline-block" *@>Do: </span>
-            <input type="Date" @*class="visible-lg-inline-block" *@ name="DateTo" value="@ViewBag.DateTo?.ToString("yyyy-MM-dd")" />
+            <span>Od: </span>
+            <input type="Date" name="DateFrom" value="@ViewBag.DateFrom?.Date?.ToString("yyyy-MM-dd")" />
+            <span>Do: </span>
+            <input type="Date" name="DateTo" value="@ViewBag.DateTo?.Date?.ToString("yyyy-MM-dd")" />
             <br />
             <span>Earnings: </span>
             <input type="checkbox" name="Earnings" value="true" checked="@ViewBag.Earnings" />
@@ -125,13 +45,9 @@
     <label>Počet položek: </label>
     <span>@Model.Count()</span>
     <label>Celková cena: </label>
-    <span>@Model.Sum(m => m.Cost)</span>
+    <span>@string.Format("{0:C}", Model.Sum(m => m.Cost))</span>
 </div>
 
-
-@*<table class="table">*@
-
-@*<div style="height:200px;overflow-y:scroll">*@
 <table class="table">
     <thead>
         <tr>
@@ -144,9 +60,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Date)
             </th>
-            @*<th>
-                    @Html.DisplayNameFor(model => model.ApplicationUser)
-                </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.Category)
             </th>
@@ -165,7 +78,7 @@
             <th></th>
         </tr>
     </thead>
-    @*<div style="overflow-y: scroll; height:400px;">*@
+
     <tbody>
         @foreach (var item in Model)
         {
@@ -179,9 +92,6 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Date)
                 </td>
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
-                    </td>*@
                 <td>
                     @Html.DisplayFor(modelItem => item.Category.Description)
                 </td>
@@ -206,4 +116,3 @@
         }
     </tbody>
 </table>
-@*</div>*@

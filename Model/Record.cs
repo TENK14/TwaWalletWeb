@@ -12,21 +12,12 @@ namespace TwaWallet.Model
     {
         private const string TAG = "X:" + nameof(Record);
 
-        //[Key]
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        //public string RecordId { get; set; }
-
+        [DisplayFormat(DataFormatString = "{0:C}")]
         [Required]
         public float Cost { get; set; }
         
         public string Description { get; set; }
-
-        /// <summary>
-        /// ForingKey
-        /// </summary>
-        //[Required] // kategorie můze být smazána
-        //public Guid CategoryId { get; set; }
-        
+                
         public string CategoryId { get; set; }
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
@@ -42,7 +33,6 @@ namespace TwaWallet.Model
         /// ForingKey
         /// </summary>
         [Required]
-        //public Guid LoginAccountId { get; set; }
         public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
 
@@ -50,7 +40,6 @@ namespace TwaWallet.Model
         /// ForingKey
         /// </summary>
         //[Required] // typ platby může být smazán
-        //public Guid PaymentTypeId { get; set; }
         public string PaymentTypeId { get; set; }
         public PaymentType PaymentType { get; set; }
 
@@ -64,18 +53,6 @@ namespace TwaWallet.Model
         /// false - výdej
         /// </summary>
         public bool Earnings { get; set; } = false;
-
-        //public Timestamp DateCreated { get; set; }
-
-        //public Record IncludeObjects(IDataContext db)
-        //{
-        //    //Log.Debug(TAG, nameof(IncludeObjects));
-
-        //    this.Owner = db.Select<Owner, int>((o) => o.Id == this.OwnerId, (o) => o.Id).Result.FirstOrDefault();
-        //    this.PaymentType = db.Select<PaymentType, int>((o) => o.Id == this.PaymentTypeId, (o) => o.Id).Result.FirstOrDefault();
-        //    this.Category = db.Select<Category, int>((o) => o.Id == this.CategoryId, (o) => o.Id).Result.FirstOrDefault();
-        //    return this;
-        //}
 
         public override string ToString()
         {

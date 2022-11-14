@@ -21,8 +21,6 @@ namespace TwaWallet.Web.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IDataLayer dataLayer;
 
-        public int MyProperty { get; set; }
-
         private ApplicationUser ApplicationUser
         {
             get
@@ -44,27 +42,8 @@ namespace TwaWallet.Web.Controllers
             //}
         }
 
-        //// GET: Records
-        //public async Task<IActionResult> Index()
-        //{
-        //    //var applicationDbContext = GetUsersRecords();
-        //    var records = _dataLayer.GetUserRecords();
-
-        //    if (records == null
-        //        || !records.Any())
-        //    {
-        //        //return NotFound();
-        //    }
-
-        //    _dataLayer.Load(records, r => r.Category);
-        //    _dataLayer.Load(records, r => r.PaymentType);
-
-        //    return View(await records.ToListAsync());
-
-        //}
-
         //GET: Records
-        public async Task<IActionResult> Index(DateTime? dateFrom, DateTime? dateTo, string searchString, bool earnings = false)
+        public async Task<IActionResult> Index(DateTime? dateFrom, DateTime? dateTo, string searchString, Guid? paymentTypeId, bool earnings = false)
         {
             //ViewData["DateFrom"] = dateFrom;
             //ViewData["DateTo"] = dateTo;
@@ -87,6 +66,28 @@ namespace TwaWallet.Web.Controllers
             ViewBag.CurrentFilter = searchString;
             ViewBag.Earnings = earnings;
 
+            // Pokus o filtrování dle typu platby a kategorii, je ale třeba tyto selecty dodělat vedle search
+            //var pt = new PaymentType
+            //{
+            //    ApplicationUser = ApplicationUser,
+            //    Description = "-- NEVYBRÁNO --",
+            //    Id = Guid.Empty.ToString(),
+            //    IsDefault = false
+            //};
+
+            //ViewBag.PaymentTypeId = new SelectList(new List<PaymentType>() { 
+            //    }.Concat(
+            //    dataLayer.GetUserPaymentTypes(ApplicationUser).OrderByDescending(p => p.IsDefault)),
+            //    $"{nameof(PaymentType.Id)}",
+            //    $"{nameof(PaymentType.Description)}");
+
+            //ViewBag.CategoryId = new SelectList(dataLayer.GetUserCategories(ApplicationUser).OrderByDescending(c => c.IsDefault), $"{nameof(Category.Id)}", $"{nameof(Category.Description)}");
+            //// alternativa
+            ////ViewData["CategoryId"] = new SelectList(_dataLayer.GetUserCategories().OrderByDescending(c => c.IsDefault), $"{nameof(Category.Id)}", $"{nameof(Category.Description)}");
+
+
+
+
             var records = dataLayer.GetUserRecords(ApplicationUser);
 
             if (dateFrom != null)
@@ -99,15 +100,17 @@ namespace TwaWallet.Web.Controllers
                 records = records.Where(r => r.Date <= dateTo);
             }
 
-            dataLayer.Load(records, r => r.Category);
-            dataLayer.Load(records, r => r.PaymentType);
+            //dataLayer.Load(records, r => r.Category);
+            //dataLayer.Load(records, r => r.PaymentType);
+
 
             if (!String.IsNullOrWhiteSpace(searchString))
             {
                 records = records.Where(r => r.Description.Contains(searchString)
                 || r.Tag.Contains(searchString)
-                || r.Category.Description.Contains(searchString)
-                || r.PaymentType.Description.Contains(searchString));
+                //|| r.Category.Description.Contains(searchString)
+                //|| r.PaymentType.Description.Contains(searchString)
+                );
             }
 
             if (records == null
@@ -117,7 +120,10 @@ namespace TwaWallet.Web.Controllers
             }
 
             var list = await records.ToListAsync();
-            //var list = await records.Select(r => { (r.Earnings == true ? r.Cost = r.Cost : r.Cost = 0 - r.Cost); return r; }).ToListAsync();
+
+            // Peft-tuning: (implicit loading for records instead Join)
+            var categories = dataLayer.GetUserCategories(ApplicationUser).ToList();
+            var paymentTypes = dataLayer.GetUserPaymentTypes(ApplicationUser).ToList();
 
             if (!ViewBag.Earnings)
             {
@@ -138,57 +144,6 @@ namespace TwaWallet.Web.Controllers
 
         }
 
-
-        // Partial Views
-        //public async Task<IActionResult> Index2([Bind("DateFrom,DateTo,CurrentFilter")]FilterIM filterIM)
-        public async Task<IActionResult> Index2([Bind("DateFrom,DateTo,SearchString")]FilterIM filterIM)
-
-
-        {
-            ViewBag.Filter = filterIM;
-            //ViewData["DateFrom"] = filterIM.DateFrom;
-            //ViewData["DateTo"] = filterIM.DateTo;
-            //ViewData["CurrentFilter"] = filterIM.SearchString;
-
-            ViewBag.DateFrom = filterIM.DateFrom;
-            ViewBag.DateTo = filterIM.DateTo;
-            ViewBag.CurrentFilter = filterIM.SearchString;
-
-            var records = dataLayer.GetUserRecords(ApplicationUser);
-
-            if (filterIM.DateFrom != null)
-            {
-                records = records.Where(r => r.Date >= filterIM.DateFrom);
-            }
-
-            if (filterIM.DateTo != null)
-            {
-                records = records.Where(r => r.Date <= filterIM.DateTo);
-            }
-
-            dataLayer.Load(records, r => r.Category);
-            dataLayer.Load(records, r => r.PaymentType);
-
-            if (!String.IsNullOrWhiteSpace(filterIM.SearchString))
-            {
-                records = records.Where(r => r.Description.Contains(filterIM.SearchString)
-                || r.Tag.Contains(filterIM.SearchString)
-                || r.Category.Description.Contains(filterIM.SearchString)
-                || r.PaymentType.Description.Contains(filterIM.SearchString));
-            }
-
-            if (records == null
-                || !records.Any())
-            {
-                //return NotFound();
-            }
-
-            var list = await records.ToListAsync();
-            ViewBag.List = list;
-
-            return View(list);
-
-        }
 
         // GET: Records/Details/5
         public async Task<IActionResult> Details(string id)
@@ -228,29 +183,8 @@ namespace TwaWallet.Web.Controllers
         {
             var record = new Record();
             return SetCreate(record);
-
-            //ViewBag.CategoryId = new SelectList(dataLayer.GetUserCategories(ApplicationUser).OrderByDescending(c => c.IsDefault), $"{nameof(Category.Id)}", $"{nameof(Category.Description)}");
-            //// alternativa
-            ////ViewData["CategoryId"] = new SelectList(_dataLayer.GetUserCategories().OrderByDescending(c => c.IsDefault), $"{nameof(Category.Id)}", $"{nameof(Category.Description)}");
-            //ViewBag.PaymentTypeId = new SelectList(dataLayer.GetUserPaymentTypes(ApplicationUser).OrderByDescending(p => p.IsDefault), $"{nameof(PaymentType.Id)}", $"{nameof(PaymentType.Description)}");
-
-            //ViewBag.Date = DateTime.Now;
-
-            //return View(record);
         }
 
-        // GET: Records/Create
-        //public IActionResult Create2()
-        //{
-        //    var record = new Record();
-
-        //    ViewBag.CategoryId = new SelectList(_dataLayer.GetUserCategories().OrderByDescending(c => c.IsDefault), $"{nameof(Category.Id)}", $"{nameof(Category.Description)}");
-        //    ViewBag.PaymentTypeId = new SelectList(_dataLayer.GetUserPaymentTypes().OrderByDescending(p => p.IsDefault), $"{nameof(PaymentType.Id)}", $"{nameof(PaymentType.Description)}");
-
-        //    ViewBag.Date = DateTime.Now;
-
-        //    return View(record);
-        //}
 
         // POST: Records/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -415,27 +349,5 @@ namespace TwaWallet.Web.Controllers
             return new JsonResult(message);
         }
 
-        //private bool RecordExists(string id)
-        //{
-        //    return _context.Records.Any(e => e.Id == id);
-        //}
-
-        //private Record GetUsersRecord(string id)
-        //{
-        //    return _context.Records
-        //        .Include(r => r.ApplicationUser)
-        //        .Include(r => r.Category)
-        //        .Include(r => r.PaymentType)
-        //        .SingleOrDefaultAsync(r => r.Id == id && r.ApplicationUser == this.ApplicationUser).Result;
-        //}
-
-        //private IQueryable<Record> GetUsersRecords()
-        //{
-        //    return _context.Records
-        //        .Include(r => r.ApplicationUser)
-        //        .Include(r => r.Category)
-        //        .Include(r => r.PaymentType)
-        //        .Where(r => r.ApplicationUser == this.ApplicationUser);
-        //}
     }
 }

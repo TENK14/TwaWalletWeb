@@ -22,10 +22,8 @@ namespace TwaWallet.Web.Models.RecurringPaymentViewModels
         public string PaymentTypeId { get; set; }
         public string PaymentTypeDescription { get; set; }
         //public PaymentType PaymentType { get; set; }
-        //[Required]
-        //public Guid LoginAccountId { get; set; }
-        //public string ApplicationUserId { get; set; }
-        //public ApplicationUser ApplicationUser { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:C}")]
         [Required]
         public float Cost { get; set; }
 

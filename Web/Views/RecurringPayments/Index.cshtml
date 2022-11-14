@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Recurring payments</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -41,9 +41,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.EndDate)
             </th>
-            @*<th>
-            @Html.DisplayNameFor(model => model.ApplicationUser)
-        </th>*@
             <th>
                 @*@Html.DisplayNameFor(model => model.Category)*@
                 @Html.Display("Category")
@@ -89,9 +86,6 @@
             <td>
                 @Html.DisplayFor(modelItem => item.EndDate)
             </td>
-            @*<td>
-                @Html.DisplayFor(modelItem => item.ApplicationUser.Id)
-            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.CategoryDescription)
             </td>
@@ -108,11 +102,6 @@
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-
-                @*@{
-            //Response.Redirect("~/Records/Create");
-            @Html.ActionLink("Create", "Records");
-        }*@
             </td>
         </tr>
 }

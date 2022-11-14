@@ -64,7 +64,7 @@ tbody {
 
     tbody td, thead th {
         /* width: 20%; */ /* Optional */
-        border-right: 1px solid black;
+        /*border-right: 1px solid black;*/
         /* white-space: nowrap; */
     }
 

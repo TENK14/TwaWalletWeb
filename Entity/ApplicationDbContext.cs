@@ -61,6 +61,18 @@ namespace TwaWallet.Entity
             .HasForeignKey(nameof(Record.PaymentTypeId))
             .OnDelete(DeleteBehavior.SetNull);
 
+            modelBuilder.Entity(typeof(Record))
+                .HasIndex(nameof(Record.Description));
+
+            modelBuilder.Entity(typeof(Record))
+                .HasIndex(nameof(Record.Tag));
+
+            modelBuilder.Entity(typeof(Record))
+                .HasIndex(nameof(Record.Category.Description));
+
+            modelBuilder.Entity(typeof(Record))
+                .HasIndex(nameof(Record.Date));
+
             // RecurringPayment
             modelBuilder.Entity(typeof(RecurringPayment))
             .HasOne(typeof(ApplicationUser), nameof(RecurringPayment.ApplicationUser))

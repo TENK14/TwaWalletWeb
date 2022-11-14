@@ -19,5 +19,11 @@ namespace TwaWallet.Web.Models.Record
         [Display(Name = "")]
         public string SearchString { get; set; }
 
+        [Display(Name = "Typ platby")]
+        public string PaymentTypeId { get; set; }
+
+        [Display(Name = "Kategorie")]
+        public string CategoryId { get; set; }
+
     }
 }

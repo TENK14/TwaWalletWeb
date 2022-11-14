@@ -93,7 +93,18 @@ namespace TwaWallet.Web.DataLayer
         {
             //ApplicationUser user = _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User).Result;
 
-            var records = context.Records.Where(c => c.ApplicationUserId == user.Id).OrderByDescending(r => r.Date).ThenByDescending(r => r.Id);
+            var records = context.Records
+                //.Join(context.Categories, 
+                //    r => r.CategoryId, 
+                //    c => c.Id, 
+                //    (r, c) => r)
+                //.Join(context.PaymentTypes,
+                //    r => r.PaymentTypeId,
+                //    pt => pt.Id,
+                //    (r, pt) => r)
+                .Where(c => c.ApplicationUserId == user.Id)
+                .OrderByDescending(r => r.Date)
+                .ThenByDescending(r => r.Id);
 
             return records;
         }

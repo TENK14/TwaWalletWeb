@@ -12,10 +12,6 @@ namespace TwaWallet.Model
     {
         private const string TAG = "X:" + nameof(RecurringPayment);
 
-        //[Key]
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        //public string RecurringPaymentId { get; set; }
-
         [Required]
         public string Description { get; set; }
 
@@ -29,9 +25,11 @@ namespace TwaWallet.Model
         public string PaymentTypeId { get; set; }
         public PaymentType PaymentType { get; set; }
         [Required]
-        //public Guid LoginAccountId { get; set; }
         public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
+
+
+        [DisplayFormat(DataFormatString = "{0:C}")]
         [Required]
         public float Cost { get; set; }
 

@@ -31,13 +31,11 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @*<li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-        <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-        <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>*@
                     <li><a asp-area="" asp-controller="Records" asp-action="Index">Records</a></li>
                     <li><a asp-area="" asp-controller="Categories" asp-action="Index">Categories</a></li>
                     <li><a asp-area="" asp-controller="PaymentTypes" asp-action="Index">Payment types</a></li>
                     <li><a asp-area="" asp-controller="RecurringPayments" asp-action="Index">Recurring payments</a></li>
+                    <li><a asp-area="" asp-controller="Summary" asp-action="Index">Summary</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
@@ -47,7 +45,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2018 - Web - Version: 27.5.2019</p>
+            <p>&copy; 2018 - Web - Version: 14.11.2022</p>
         </footer>
     </div>
 
