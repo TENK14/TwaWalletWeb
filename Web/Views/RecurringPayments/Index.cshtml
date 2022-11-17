@@ -11,6 +11,14 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<div>
+    <label>Počet aktivních položek: </label>
+    <span>@Model.Where(m => m.IsActive).Count()</span>
+    <label>Celková cena: </label>
+    <span>@string.Format("{0:C}", Model.Where(m => m.IsActive).Sum(m => m.Cost))</span>
+</div>
+
 <table class="table">
     <thead>
         <tr>
