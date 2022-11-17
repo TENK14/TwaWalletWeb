@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -16,6 +18,9 @@ namespace TwaWallet.Web
     {
         public static void Main(string[] args)
         {
+            CultureInfo cultureInfo = new CultureInfo("cs-CZ");
+            Thread.CurrentThread.CurrentCulture = cultureInfo;
+
             BuildWebHost(args).Run();
         }
 
