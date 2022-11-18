@@ -48,16 +48,16 @@ namespace TwaWallet.Web.Controllers
             //ViewData["DateFrom"] = dateFrom;
             //ViewData["DateTo"] = dateTo;
             //ViewData["CurrentFilter"] = searchString;
+                
+            var today = DateTime.Now.Date;
 
             if (!dateFrom.HasValue)
             {
-                var today = DateTime.Now.Date;
                 dateFrom = new DateTime(today.Year, today.Month, 1);
             }
 
             if (!dateTo.HasValue)
             {
-                var today = DateTime.Now.Date;
                 dateTo = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
             }
 
@@ -92,12 +92,12 @@ namespace TwaWallet.Web.Controllers
 
             if (dateFrom != null)
             {
-                records = records.Where(r => r.Date >= dateFrom);
+                records = records.Where(r => r.Date.Date >= dateFrom.Value.Date);
             }
 
             if (dateTo != null)
             {
-                records = records.Where(r => r.Date <= dateTo);
+                records = records.Where(r => r.Date.Date <= dateTo.Value.Date);
             }
 
             //dataLayer.Load(records, r => r.Category);

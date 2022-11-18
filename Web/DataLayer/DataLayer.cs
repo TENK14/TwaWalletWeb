@@ -162,6 +162,14 @@ namespace TwaWallet.Web.DataLayer
             //await context.SaveChangesA
         }
 
+        public async Task<TEntity[]> AddRangeAsync<TEntity>(TEntity[] entities)
+            where TEntity : class
+        {
+            await context.AddRangeAsync(entities);
+            await context.SaveChangesAsync();
+            return entities;
+        }
+
         public async Task<TEntity> UpdateAsync<TEntity>(TEntity entity)
             where TEntity : class
         {

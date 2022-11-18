@@ -255,6 +255,24 @@ namespace Web.Controllers
         }
 
 
+        public async Task<IActionResult> GenerateAllActiveRecurringPayments()
+        {
+            var activeRecurringPayments = dataLayer.GetUserRecurringPayments(ApplicationUser)
+                .Where(rp => rp.IsActive);
+
+            var records = new List<Record>();
+
+            foreach(var recurringPayment in activeRecurringPayments)
+            {
+                records.Add(await MapRecurringPaymentToRecordAsync(recurringPayment));
+            }
+
+            await dataLayer.AddRangeAsync(records.ToArray());
+
+            return RedirectToAction(nameof(Index), "Records");
+        }
+
+
         public async Task<IActionResult> GeneratePayment(string id)
         {
             if (id == null)
@@ -268,18 +286,16 @@ namespace Web.Controllers
                 return NotFound();
             }
 
-            var categories = dataLayer.GetUserCategories(ApplicationUser).OrderByDescending(c => c.IsDefault);
-            var intervals = dataLayer.GetIntervals().OrderByDescending(c => c.IsDefault);
-            var paymentTypes = dataLayer.GetUserPaymentTypes(ApplicationUser).OrderByDescending(c => c.IsDefault);
 
-            ViewBag.CategoryId = new SelectList(categories, $"{nameof(Category.Id)}", $"{nameof(Category.Description)}", recurringPayment.CategoryId);
-            ViewBag.IntervalId = new SelectList(intervals, $"{nameof(Interval.Id)}", $"{nameof(Interval.Description)}", recurringPayment.IntervalId);
-            ViewBag.PaymentTypeId = new SelectList(paymentTypes, $"{nameof(PaymentType.Id)}", $"{nameof(PaymentType.Description)}", recurringPayment.PaymentTypeId);
+            var record = await MapRecurringPaymentToRecordAsync(recurringPayment);
+            await dataLayer.AddAsync(record);
 
-            var recurringPaymentVM = new RecurringPaymentViewModel();
-            ModelToVm(recurringPayment, recurringPaymentVM, intervals.ToList());
+            return RedirectToAction(nameof(Index));
+        }
 
-            var record = new TwaWallet.Model.Record
+        private async Task<Record> MapRecurringPaymentToRecordAsync(RecurringPayment recurringPayment)
+        {
+            var record = new Record
             {
                 ApplicationUser = await userManager.GetUserAsync(User),
                 CategoryId = recurringPayment.CategoryId,
@@ -291,26 +307,8 @@ namespace Web.Controllers
                 Tag = recurringPayment.Tag,
                 Warranty = recurringPayment.Warranty
             };
-            await dataLayer.AddAsync(record);
-            return RedirectToAction(nameof(Index));
-            //return RedirectToAction(nameof(Index), "Records");
 
-            //return RedirectToAction("Create", "Records", new TwaWallet.Model.Record
-            //{
-            //    //ApplicationUserId = Model.apli,
-            //    CategoryId = recurringPayment.CategoryId,
-            //    Cost = recurringPayment.Cost,
-            //    Date = DateTime.Now.AddDays(-2),
-            //    Description = recurringPayment.Description,
-            //    Earnings = recurringPayment.Earnings,
-            //    PaymentTypeId = recurringPayment.PaymentTypeId,
-            //    Tag = recurringPayment.Tag,
-            //    Warranty = recurringPayment.Warranty
-            //});
-
-            //return new RecordsController(userManager, dataLayer).SetCreate(record);
-
-            //return View(recurringPaymentVM);
+            return record;
         }
 
         private bool RecurringPaymentExists(string id)
