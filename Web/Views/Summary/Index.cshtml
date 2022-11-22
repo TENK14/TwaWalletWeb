@@ -48,12 +48,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.Period)
             </th>
-            <th>
+            <th class="align-right">
                 @Html.DisplayNameFor(model => model.Expenses)
             </th>
             @if (ViewBag.Earnings)
             {
-                <th>
+                <th class="align-right">
                     @Html.DisplayNameFor(model => model.Earnings)
                 </th>
             }
@@ -67,16 +67,30 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Period)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Expenses)
+                <td class="align-right">
+                    @Html.DisplayFor(modelItem => item.Expenses, new { @class = "pmtallocated pull-right" , @dir = "rtl" }) @*class do nothing*@
                 </td>
                 @if (ViewBag.Earnings)
                 {
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Earnings)
+                    <td class="align-right">
+                        @Html.DisplayFor(modelItem => item.Earnings, new { @class = "pmtallocated pull-right" , @dir = "rtl" }) @*class do nothing*@
                     </td>
                 }
             </tr>
         }
+        <tr style="font-weight:bold">
+            <td>
+                Total:
+            </td>
+            <td class="align-right">
+                @string.Format("{0:C}", Model.Sum(m => m.Expenses))
+            </td>
+            @if (ViewBag.Earnings)
+            {
+                <td class="align-right">
+                    @string.Format("{0:C}", Model.Sum(m => m.Earnings))
+                </td>
+            }
+        </tr>
     </tbody>
 </table>

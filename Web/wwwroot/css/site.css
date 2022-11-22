@@ -62,12 +62,31 @@ tbody {
     border-top: 2px solid black;
 }
 
-    tbody td, thead th {
-        /* width: 20%; */ /* Optional */
-        /*border-right: 1px solid black;*/
-        /* white-space: nowrap; */
-    }
+tbody td, thead th {
+    /* width: 20%; */ /* Optional */
+    /*border-right: 1px solid black;*/
+    /* white-space: nowrap; */
+}
 
-        tbody td:last-child, thead th:last-child {
-            border-right: none;
-        }
+tbody td:last-child, thead th:last-child {
+    border-right: none;
+}
+/*
+.pmtallocated {
+    align-content: end;
+    color: red;
+}
+
+.pmtallocated pull-right {
+    align-content: end;
+    align-items: end;
+    color: aquamarine;
+}
+*/
+
+.align-right {
+    /*align-items: end;*/
+    /*align-content: end;*/
+    text-align: right;
+    /*color: red;*/
+}   
