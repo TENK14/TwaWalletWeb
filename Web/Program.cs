@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Globalization;
-using System.Threading;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,11 +16,16 @@ using TwaWallet.Web.Data;
 using TwaWallet.Web.DataLayer;
 using TwaWallet.Web.Services;
 
-// Set culture
-CultureInfo cultureInfo = new CultureInfo("cs-CZ");
-Thread.CurrentThread.CurrentCulture = cultureInfo;
-
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Request Localization
+var supportedCultures = new[] { new CultureInfo("cs-CZ") };
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture("cs-CZ");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
 
 // Add services to the container
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -74,6 +79,9 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+// Use Request Localization (must be before UseRouting)
+app.UseRequestLocalization();
 
 app.UseRouting();
 
