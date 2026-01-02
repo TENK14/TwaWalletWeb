@@ -5,6 +5,7 @@
     <UserSecretsId>aspnet-Web-9A201301-C77A-4936-A22A-9A17774E8C18</UserSecretsId>
     <AssemblyName>TwaWallet.Web</AssemblyName>
     <RootNamespace>TwaWallet.Web</RootNamespace>
+    <ApplicationIcon>wwwroot\favicon-Gemini-WalletGraph-192x192-transparent3.ico</ApplicationIcon>
   </PropertyGroup>
 
 
