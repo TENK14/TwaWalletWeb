@@ -12,7 +12,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using TwaWallet.Entity;
 using TwaWallet.Model;
-using TwaWallet.Web.Models;
 using TwaWallet.Web.Models.AccountViewModels;
 using TwaWallet.Web.Services;
 using TwaWallet.Web.Controllers;
