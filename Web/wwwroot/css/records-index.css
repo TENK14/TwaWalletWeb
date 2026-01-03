@@ -15,6 +15,8 @@
     white-space: normal;
 }
 
+
+
 /* Responzivní úpravy pouze pro tuto stránku */
 @media (max-width: 767px) {
     /* Skrytí sloupců PaymentType a Tag na mobilu */
@@ -25,6 +27,19 @@
         display: none;
     }
 
+    /* Styl pro date inputs - aby byly na jednom řádku */
+    .form-actions span,
+    .form-actions input[type="Date"] {
+        display: inline-block;
+        vertical-align: middle;
+        horizontal-align: middle;
+        font-size: 10px;
+    }
+/*
+    .form-actions input[type="Date"] {
+        margin-right: 10px;
+    }
+*/
     /* Zmenšení velikosti textu */
     .records-table {
         font-size: 10px;
