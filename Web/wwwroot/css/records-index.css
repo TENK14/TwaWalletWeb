@@ -1,0 +1,36 @@
+﻿.earnings-true {
+    background-color: lightblue;
+}
+
+.earnings-false {
+    background-color: lightcoral;
+}
+
+/* Responzivní úpravy pouze pro tuto stránku */
+@media (max-width: 767px) {
+    /* Skrytí sloupců PaymentType a Tag na mobilu */
+    .records-table td:nth-child(6), /* Tag */
+    .records-table th:nth-child(6),
+    .records-table td:nth-child(7), /* Earnings */
+    .records-table th:nth-child(7) {
+        display: none;
+    }
+
+    /* Zmenšení velikosti textu */
+    .records-table {
+        font-size: 12px;
+    }
+
+        .records-table td,
+        .records-table th {
+            padding: 5px;
+            white-space: nowrap;
+        }
+}
+
+/* Responzivní wrapper pro horizontální scroll */
+.table-responsive-records {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
