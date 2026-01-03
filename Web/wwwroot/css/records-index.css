@@ -1,9 +1,18 @@
 ﻿.earnings-true {
-    background-color: lightblue;
+    /*border-left: 5px solid lightblue;*/
+    border-left: 5px solid lightgreen;
 }
 
 .earnings-false {
-    background-color: lightcoral;
+    border-left: 5px solid lightcoral;
+}
+
+/* Omezení šířky sloupce Description a zalamování textu */
+.records-table td:nth-child(2),
+.records-table th:nth-child(2) {
+    max-width: 250px;
+    word-wrap: break-word;
+    white-space: normal;
 }
 
 /* Responzivní úpravy pouze pro tuto stránku */
@@ -18,14 +27,23 @@
 
     /* Zmenšení velikosti textu */
     .records-table {
-        font-size: 12px;
+        font-size: 10px;
+        border-spacing: 0;
     }
 
         .records-table td,
         .records-table th {
-            padding: 5px;
-            white-space: nowrap;
+            padding: 2px 1px !important;
         }
+        
+    /* Description má mít normální zalamování i na mobilu - MUSÍ být za obecným pravidlem */
+    .records-table td:nth-child(2),
+    .records-table th:nth-child(2) {
+        max-width: 150px;
+        word-wrap: break-word;
+        white-space: normal !important;
+        padding: 2px 1px !important;
+    }
 }
 
 /* Responzivní wrapper pro horizontální scroll */
