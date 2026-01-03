@@ -128,7 +128,7 @@ namespace TwaWallet.Web.DataLayer
         //    return categories;
         //}
 
-        public void Load<TEntity, TProperty>(IEnumerable<TEntity> entitiesToLoad, Expression<Func<TEntity, TProperty>> propertyPath) where TEntity : class where TProperty : class
+        public void Load<TEntity, TProperty>(List<TEntity> entitiesToLoad, Expression<Func<TEntity, TProperty>> propertyPath) where TEntity : class where TProperty : class
         {
             foreach (var e in entitiesToLoad)
             {

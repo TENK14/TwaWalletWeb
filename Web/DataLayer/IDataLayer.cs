@@ -25,7 +25,7 @@ namespace TwaWallet.Web.DataLayer
 
         IQueryable<Interval> GetIntervals();
 
-        void Load<TEntity, TProperty>(IEnumerable<TEntity> entitiesToLoad, Expression<Func<TEntity, TProperty>> propertyPath)
+        void Load<TEntity, TProperty>(List<TEntity> entitiesToLoad, Expression<Func<TEntity, TProperty>> propertyPath)
             where TEntity : class
             where TProperty : class;
 

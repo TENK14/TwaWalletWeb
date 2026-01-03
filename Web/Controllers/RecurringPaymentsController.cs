@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using TwaWallet.Entity;
 using TwaWallet.Model;
 using TwaWallet.Web.Controllers;
@@ -23,6 +24,7 @@ namespace Web.Controllers
         //private readonly ApplicationDbContext context;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IDataLayer dataLayer;
+        private readonly ILogger<RecurringPaymentsController> logger;
         //private readonly ApplicationUser user;
 
         private ApplicationUser ApplicationUser
@@ -35,82 +37,132 @@ namespace Web.Controllers
 
         public RecurringPaymentsController(ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
-            IDataLayer dataLayer)
+            IDataLayer dataLayer,
+            ILogger<RecurringPaymentsController> logger)
         {
             //this.context = context;
             this.userManager = userManager;
             this.dataLayer = dataLayer;
+            this.logger = logger;
             //this.user = userManager.GetUserAsync(User).Result;
         }
 
         // GET: RecurringPayments
         public async Task<IActionResult> Index()
         {
+            try
+            {
+                var user = ApplicationUser;
+                if (user == null)
+                {
+                    logger.LogError("ApplicationUser is null in RecurringPaymentsController.Index. User.Identity.Name: {UserName}, User.Identity.IsAuthenticated: {IsAuthenticated}",
+                        User?.Identity?.Name ?? "null",
+                        User?.Identity?.IsAuthenticated ?? false);
+                    return RedirectToAction("Login", "Account");
+                }
 
-            var recurringPayments = dataLayer.GetUserRecurringPayments(ApplicationUser);
-            dataLayer.Load(recurringPayments, rp => rp.Category);
-            dataLayer.Load(recurringPayments, rp => rp.Interval);
-            dataLayer.Load(recurringPayments, rp => rp.PaymentType);
+                var recurringPayments = dataLayer.GetUserRecurringPayments(user).ToList();
+                dataLayer.Load(recurringPayments, rp => rp.Category);
+                dataLayer.Load(recurringPayments, rp => rp.Interval);
+                dataLayer.Load(recurringPayments, rp => rp.PaymentType);
 
-            var categories = dataLayer.GetUserCategories(ApplicationUser).OrderByDescending(c => c.IsDefault);
-            var intervals = dataLayer.GetIntervals().OrderByDescending(c => c.IsDefault);
-            var paymentTypes = dataLayer.GetUserPaymentTypes(ApplicationUser).OrderByDescending(c => c.IsDefault);
+                var categories = dataLayer.GetUserCategories(user).OrderByDescending(c => c.IsDefault);
+                var intervals = dataLayer.GetIntervals().OrderByDescending(c => c.IsDefault);
+                var paymentTypes = dataLayer.GetUserPaymentTypes(user).OrderByDescending(c => c.IsDefault);
 
-            var recurringPaymentVMs = recurringPayments.ToList().Select(rp => ModelToVm(rp, new RecurringPaymentViewModel(), intervals.ToList())).ToList();
+                var recurringPaymentVMs = recurringPayments.ToList().Select(rp => ModelToVm(rp, new RecurringPaymentViewModel(), intervals.ToList())).ToList();
 
-            //return View(await recurringPayments.ToListAsync());
-            return View(recurringPaymentVMs);
+                //return View(await recurringPayments.ToListAsync());
+                return View(recurringPaymentVMs);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error occurred in RecurringPaymentsController.Index for user {UserName}", User?.Identity?.Name ?? "unknown");
+                return View("Error");
+            }
         }
 
         // GET: RecurringPayments/Details/5
         public async Task<IActionResult> Details(string id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    logger.LogWarning("Details called with null id");
+                    return NotFound();
+                }
 
-            var recurringPayment = dataLayer.GetUserRecurringPayment(ApplicationUser, id);
-            
-            if (recurringPayment == null)
+                var user = ApplicationUser;
+                if (user == null)
+                {
+                    logger.LogError("ApplicationUser is null in RecurringPaymentsController.Details. User: {UserName}", User?.Identity?.Name ?? "null");
+                    return RedirectToAction("Login", "Account");
+                }
+
+                var recurringPayment = dataLayer.GetUserRecurringPayment(user, id);
+                
+                if (recurringPayment == null)
+                {
+                    logger.LogWarning("RecurringPayment with id {Id} not found for user {UserName}", id, user.UserName);
+                    return NotFound();
+                }
+
+                var categories = dataLayer.GetUserCategories(user).OrderByDescending(c => c.IsDefault);
+                var intervals = dataLayer.GetIntervals().OrderByDescending(c => c.IsDefault);
+                var paymentTypes = dataLayer.GetUserPaymentTypes(user).OrderByDescending(c => c.IsDefault);
+
+                dataLayer.Load(recurringPayment, rp => rp.Category);
+                dataLayer.Load(recurringPayment, rp => rp.Interval);
+                dataLayer.Load(recurringPayment, rp => rp.PaymentType);
+
+                var recurringPaymentVM = new RecurringPaymentViewModel();
+                ModelToVm(recurringPayment, recurringPaymentVM, intervals.ToList());
+
+                return View(recurringPaymentVM);
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                logger.LogError(ex, "Error occurred in RecurringPaymentsController.Details for id {Id}, user {UserName}", id, User?.Identity?.Name ?? "unknown");
+                return View("Error");
             }
-
-            var categories = dataLayer.GetUserCategories(ApplicationUser).OrderByDescending(c => c.IsDefault);
-            var intervals = dataLayer.GetIntervals().OrderByDescending(c => c.IsDefault);
-            var paymentTypes = dataLayer.GetUserPaymentTypes(ApplicationUser).OrderByDescending(c => c.IsDefault);
-
-            dataLayer.Load(recurringPayment, rp => rp.Category);
-            dataLayer.Load(recurringPayment, rp => rp.Interval);
-            dataLayer.Load(recurringPayment, rp => rp.PaymentType);
-
-            var recurringPaymentVM = new RecurringPaymentViewModel();
-            ModelToVm(recurringPayment, recurringPaymentVM, intervals.ToList());
-
-            return View(recurringPaymentVM);
         }
 
         // GET: RecurringPayments/Create
         public IActionResult Create()
         {
-            var categories = dataLayer.GetUserCategories(ApplicationUser).OrderByDescending(c => c.IsDefault);
-            var intervals = dataLayer.GetIntervals().OrderByDescending(c => c.IsDefault);
-            var paymentTypes = dataLayer.GetUserPaymentTypes(ApplicationUser).OrderByDescending(c => c.IsDefault);
+            try
+            {
+                var user = ApplicationUser;
+                if (user == null)
+                {
+                    logger.LogError("ApplicationUser is null in RecurringPaymentsController.Create");
+                    return RedirectToAction("Login", "Account");
+                }
 
-            ViewBag.CategoryId = new SelectList(categories, $"{nameof(Category.Id)}", $"{nameof(Category.Description)}");
-            ViewBag.IntervalId = new SelectList(intervals, $"{nameof(Interval.Id)}", $"{nameof(Interval.Description)}");
-            ViewBag.PaymentTypeId = new SelectList(paymentTypes, $"{nameof(PaymentType.Id)}", $"{nameof(PaymentType.Description)}");
+                var categories = dataLayer.GetUserCategories(user).OrderByDescending(c => c.IsDefault);
+                var intervals = dataLayer.GetIntervals().OrderByDescending(c => c.IsDefault);
+                var paymentTypes = dataLayer.GetUserPaymentTypes(user).OrderByDescending(c => c.IsDefault);
 
-            // alternativa
-            //ViewData["CategoryId"] = new SelectList(_dataLayer.GetUserCategories().OrderByDescending(c => c.IsDefault), $"{nameof(Category.Id)}", $"{nameof(Category.Description)}");
-            //ViewBag.PaymentTypeId = new SelectList(dataLayer.GetUserPaymentTypes().OrderByDescending(p => p.IsDefault), $"{nameof(PaymentType.Id)}", $"{nameof(PaymentType.Description)}");
+                ViewBag.CategoryId = new SelectList(categories, $"{nameof(Category.Id)}", $"{nameof(Category.Description)}");
+                ViewBag.IntervalId = new SelectList(intervals, $"{nameof(Interval.Id)}", $"{nameof(Interval.Description)}");
+                ViewBag.PaymentTypeId = new SelectList(paymentTypes, $"{nameof(PaymentType.Id)}", $"{nameof(PaymentType.Description)}");
 
-            ViewBag.Date = DateTime.Now;
+                // alternativa
+                //ViewData["CategoryId"] = new SelectList(_dataLayer.GetUserCategories().OrderByDescending(c => c.IsDefault), $"{nameof(Category.Id)}", $"{nameof(Category.Description)}");
+                //ViewBag.PaymentTypeId = new SelectList(dataLayer.GetUserPaymentTypes().OrderByDescending(p => p.IsDefault), $"{nameof(PaymentType.Id)}", $"{nameof(PaymentType.Description)}");
 
-            var recurringPaymentVM = new RecurringPaymentViewModel();
+                ViewBag.Date = DateTime.Now;
 
-            return View(recurringPaymentVM);
+                var recurringPaymentVM = new RecurringPaymentViewModel();
+
+                return View(recurringPaymentVM);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error occurred in RecurringPaymentsController.Create GET for user {UserName}", User?.Identity?.Name ?? "unknown");
+                return View("Error");
+            }
         }
 
         // POST: RecurringPayments/Create
@@ -121,52 +173,85 @@ namespace Web.Controllers
         //public async Task<IActionResult> Create([Bind("Description,CategoryId,PaymentTypeId,ApplicationUserId,Cost,IntervalId,Earnings,Warranty,Tag,DateCreated,LastUpdate,IsActive,EndDate,Id")] RecurringPayment recurringPayment)
         public async Task<IActionResult> Create([Bind("Description,CategoryId,PaymentTypeId,Cost,IntervalId,Earnings,Warranty,Tag,IsActive,StartDate,EndDate")] RecurringPaymentViewModel recurringPaymentVM)
         {
-            var categories = dataLayer.GetUserCategories(ApplicationUser).OrderByDescending(c => c.IsDefault);
-            var intervals = dataLayer.GetIntervals().OrderByDescending(c => c.IsDefault);
-            var paymentTypes = dataLayer.GetUserPaymentTypes(ApplicationUser).OrderByDescending(c => c.IsDefault);
-
-            if (ModelState.IsValid)
+            try
             {
-                var recurringPayment = new RecurringPayment();
-                VmToModel(recurringPaymentVM, recurringPayment, intervals.ToList());
+                var user = ApplicationUser;
+                if (user == null)
+                {
+                    logger.LogError("ApplicationUser is null in RecurringPaymentsController.Create POST");
+                    return RedirectToAction("Login", "Account");
+                }
 
-                await dataLayer.AddAsync(recurringPayment);
-                return RedirectToAction(nameof(Index));
+                var categories = dataLayer.GetUserCategories(user).OrderByDescending(c => c.IsDefault);
+                var intervals = dataLayer.GetIntervals().OrderByDescending(c => c.IsDefault);
+                var paymentTypes = dataLayer.GetUserPaymentTypes(user).OrderByDescending(c => c.IsDefault);
+
+                if (ModelState.IsValid)
+                {
+                    var recurringPayment = new RecurringPayment();
+                    VmToModel(recurringPaymentVM, recurringPayment, intervals.ToList());
+
+                    await dataLayer.AddAsync(recurringPayment);
+                    logger.LogInformation("RecurringPayment created successfully by user {UserName}", user.UserName);
+                    return RedirectToAction(nameof(Index));
+                }
+
+                ViewBag.CategoryId = new SelectList(categories, $"{nameof(Category.Id)}", $"{nameof(Category.Description)}", recurringPaymentVM.CategoryId);
+                ViewBag.IntervalId = new SelectList(intervals, $"{nameof(Interval.Id)}", $"{nameof(Interval.Description)}", recurringPaymentVM.IntervalId);
+                ViewBag.PaymentTypeId = new SelectList(paymentTypes, $"{nameof(PaymentType.Id)}", $"{nameof(PaymentType.Description)}", recurringPaymentVM.PaymentTypeId);
+
+                return View(recurringPaymentVM);
             }
-
-            ViewBag.CategoryId = new SelectList(categories, $"{nameof(Category.Id)}", $"{nameof(Category.Description)}", recurringPaymentVM.CategoryId);
-            ViewBag.IntervalId = new SelectList(intervals, $"{nameof(Interval.Id)}", $"{nameof(Interval.Description)}", recurringPaymentVM.IntervalId);
-            ViewBag.PaymentTypeId = new SelectList(paymentTypes, $"{nameof(PaymentType.Id)}", $"{nameof(PaymentType.Description)}", recurringPaymentVM.PaymentTypeId);
-
-            return View(recurringPaymentVM);
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error occurred in RecurringPaymentsController.Create POST for user {UserName}", User?.Identity?.Name ?? "unknown");
+                return View("Error");
+            }
         }
 
         // GET: RecurringPayments/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    logger.LogWarning("Edit called with null id");
+                    return NotFound();
+                }
 
-            var recurringPayment = dataLayer.GetUserRecurringPayment(ApplicationUser, id);
-            if (recurringPayment == null)
+                var user = ApplicationUser;
+                if (user == null)
+                {
+                    logger.LogError("ApplicationUser is null in RecurringPaymentsController.Edit GET");
+                    return RedirectToAction("Login", "Account");
+                }
+
+                var recurringPayment = dataLayer.GetUserRecurringPayment(user, id);
+                if (recurringPayment == null)
+                {
+                    logger.LogWarning("RecurringPayment with id {Id} not found for user {UserName}", id, user.UserName);
+                    return NotFound();
+                }
+
+                var categories = dataLayer.GetUserCategories(user).OrderByDescending(c => c.IsDefault);
+                var intervals = dataLayer.GetIntervals().OrderByDescending(c => c.IsDefault);
+                var paymentTypes = dataLayer.GetUserPaymentTypes(user).OrderByDescending(c => c.IsDefault);
+
+                ViewBag.CategoryId = new SelectList(categories, $"{nameof(Category.Id)}", $"{nameof(Category.Description)}", recurringPayment.CategoryId);
+                ViewBag.IntervalId = new SelectList(intervals, $"{nameof(Interval.Id)}", $"{nameof(Interval.Description)}", recurringPayment.IntervalId);
+                ViewBag.PaymentTypeId = new SelectList(paymentTypes, $"{nameof(PaymentType.Id)}", $"{nameof(PaymentType.Description)}", recurringPayment.PaymentTypeId);
+
+                var recurringPaymentVM = new RecurringPaymentViewModel();
+                ModelToVm(recurringPayment, recurringPaymentVM, intervals.ToList());
+
+                return View(recurringPaymentVM);
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                logger.LogError(ex, "Error occurred in RecurringPaymentsController.Edit GET for id {Id}, user {UserName}", id, User?.Identity?.Name ?? "unknown");
+                return View("Error");
             }
-
-            var categories = dataLayer.GetUserCategories(ApplicationUser).OrderByDescending(c => c.IsDefault);
-            var intervals = dataLayer.GetIntervals().OrderByDescending(c => c.IsDefault);
-            var paymentTypes = dataLayer.GetUserPaymentTypes(ApplicationUser).OrderByDescending(c => c.IsDefault);
-
-            ViewBag.CategoryId = new SelectList(categories, $"{nameof(Category.Id)}", $"{nameof(Category.Description)}", recurringPayment.CategoryId);
-            ViewBag.IntervalId = new SelectList(intervals, $"{nameof(Interval.Id)}", $"{nameof(Interval.Description)}", recurringPayment.IntervalId);
-            ViewBag.PaymentTypeId = new SelectList(paymentTypes, $"{nameof(PaymentType.Id)}", $"{nameof(PaymentType.Description)}", recurringPayment.PaymentTypeId);
-
-            var recurringPaymentVM = new RecurringPaymentViewModel();
-            ModelToVm(recurringPayment, recurringPaymentVM, intervals.ToList());
-
-            return View(recurringPaymentVM);
         }
 
         // POST: RecurringPayments/Edit/5
@@ -177,70 +262,105 @@ namespace Web.Controllers
         //public async Task<IActionResult> Edit(string id, [Bind("Description,CategoryId,PaymentTypeId,ApplicationUserId,Cost,IntervalId,Earnings,Warranty,Tag,DateCreated,LastUpdate,IsActive,EndDate,Id")] RecurringPayment recurringPayment)
         public async Task<IActionResult> Edit(string id, [Bind("Description,CategoryId,PaymentTypeId,ApplicationUserId,Cost,IntervalId,Earnings,Warranty,Tag,IsActive,StartDate,EndDate,Id")] RecurringPaymentViewModel recurringPaymentVM)
         {
-            if (id != recurringPaymentVM.Id)
+            try
             {
-                return NotFound();
+                if (id != recurringPaymentVM.Id)
+                {
+                    logger.LogWarning("Edit POST id mismatch. URL id: {UrlId}, ViewModel id: {ViewModelId}", id, recurringPaymentVM.Id);
+                    return NotFound();
+                }
+
+                var user = ApplicationUser;
+                if (user == null)
+                {
+                    logger.LogError("ApplicationUser is null in RecurringPaymentsController.Edit POST");
+                    return RedirectToAction("Login", "Account");
+                }
+
+                var categories = dataLayer.GetUserCategories(user).OrderByDescending(c => c.IsDefault);
+                var intervals = dataLayer.GetIntervals().OrderByDescending(c => c.IsDefault);
+                var paymentTypes = dataLayer.GetUserPaymentTypes(user).OrderByDescending(c => c.IsDefault);
+
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        var recurringPayment = dataLayer.GetUserRecurringPayment(user, recurringPaymentVM.Id);
+                        VmToModel(recurringPaymentVM, recurringPayment, intervals.ToList());
+
+                        await dataLayer.UpdateAsync(recurringPayment);
+                        logger.LogInformation("RecurringPayment {Id} updated successfully by user {UserName}", id, user.UserName);
+                    }
+                    catch (DbUpdateConcurrencyException ex)
+                    {
+                        if (!RecurringPaymentExists(recurringPaymentVM.Id))
+                        {
+                            logger.LogWarning("RecurringPayment {Id} not found during update", recurringPaymentVM.Id);
+                            return NotFound();
+                        }
+                        else
+                        {
+                            logger.LogError(ex, "DbUpdateConcurrencyException occurred while updating RecurringPayment {Id}", recurringPaymentVM.Id);
+                            throw;
+                        }
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
+
+                ViewBag.CategoryId = new SelectList(categories, $"{nameof(Category.Id)}", $"{nameof(Category.Description)}", recurringPaymentVM.CategoryId);
+                ViewBag.IntervalId = new SelectList(intervals, $"{nameof(Interval.Id)}", $"{nameof(Interval.Description)}", recurringPaymentVM.IntervalId);
+                ViewBag.PaymentTypeId = new SelectList(paymentTypes, $"{nameof(PaymentType.Id)}", $"{nameof(PaymentType.Description)}", recurringPaymentVM.PaymentTypeId);
+                
+                return View(recurringPaymentVM);
             }
-
-             var categories = dataLayer.GetUserCategories(ApplicationUser).OrderByDescending(c => c.IsDefault);
-             var intervals = dataLayer.GetIntervals().OrderByDescending(c => c.IsDefault);
-             var paymentTypes = dataLayer.GetUserPaymentTypes(ApplicationUser).OrderByDescending(c => c.IsDefault);
-
-            if (ModelState.IsValid)
+            catch (Exception ex)
             {
-                try
-                {
-                    var recurringPayment = dataLayer.GetUserRecurringPayment(ApplicationUser, recurringPaymentVM.Id);
-                    VmToModel(recurringPaymentVM, recurringPayment, intervals.ToList());
-
-                    await dataLayer.UpdateAsync(recurringPayment);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RecurringPaymentExists(recurringPaymentVM.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                logger.LogError(ex, "Error occurred in RecurringPaymentsController.Edit POST for id {Id}, user {UserName}", id, User?.Identity?.Name ?? "unknown");
+                return View("Error");
             }
-
-            ViewBag.CategoryId = new SelectList(categories, $"{nameof(Category.Id)}", $"{nameof(Category.Description)}", recurringPaymentVM.CategoryId);
-            ViewBag.IntervalId = new SelectList(intervals, $"{nameof(Interval.Id)}", $"{nameof(Interval.Description)}", recurringPaymentVM.IntervalId);
-            ViewBag.PaymentTypeId = new SelectList(paymentTypes, $"{nameof(PaymentType.Id)}", $"{nameof(PaymentType.Description)}", recurringPaymentVM.PaymentTypeId);
-            
-            return View(recurringPaymentVM);
         }
 
         // GET: RecurringPayments/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    logger.LogWarning("Delete called with null id");
+                    return NotFound();
+                }
 
-            var recurringPayment = dataLayer.GetUserRecurringPayment(ApplicationUser, id);
-            if (recurringPayment == null)
+                var user = ApplicationUser;
+                if (user == null)
+                {
+                    logger.LogError("ApplicationUser is null in RecurringPaymentsController.Delete GET");
+                    return RedirectToAction("Login", "Account");
+                }
+
+                var recurringPayment = dataLayer.GetUserRecurringPayment(user, id);
+                if (recurringPayment == null)
+                {
+                    logger.LogWarning("RecurringPayment with id {Id} not found for deletion", id);
+                    return NotFound();
+                }
+
+                dataLayer.Load(recurringPayment, rp => rp.Category);
+                dataLayer.Load(recurringPayment, rp => rp.Interval);
+                dataLayer.Load(recurringPayment, rp => rp.PaymentType);
+
+                var intervals = dataLayer.GetIntervals().OrderByDescending(c => c.IsDefault);
+
+                var recurringPaymentVM = new RecurringPaymentViewModel();
+                ModelToVm(recurringPayment, recurringPaymentVM, intervals.ToList());
+
+                return View(recurringPaymentVM);
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                logger.LogError(ex, "Error occurred in RecurringPaymentsController.Delete GET for id {Id}, user {UserName}", id, User?.Identity?.Name ?? "unknown");
+                return View("Error");
             }
-
-            dataLayer.Load(recurringPayment, rp => rp.Category);
-            dataLayer.Load(recurringPayment, rp => rp.Interval);
-            dataLayer.Load(recurringPayment, rp => rp.PaymentType);
-
-            var intervals = dataLayer.GetIntervals().OrderByDescending(c => c.IsDefault);
-
-            var recurringPaymentVM = new RecurringPaymentViewModel();
-            ModelToVm(recurringPayment, recurringPaymentVM, intervals.ToList());
-
-
-            return View(recurringPaymentVM);
         }
 
         // POST: RecurringPayments/Delete/5
@@ -248,49 +368,98 @@ namespace Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var recurringPayment = dataLayer.GetUserRecurringPayment(ApplicationUser, id);
-            await dataLayer.DeleteAsync(recurringPayment);
+            try
+            {
+                var user = ApplicationUser;
+                if (user == null)
+                {
+                    logger.LogError("ApplicationUser is null in RecurringPaymentsController.DeleteConfirmed");
+                    return RedirectToAction("Login", "Account");
+                }
 
-            return RedirectToAction(nameof(Index));
+                var recurringPayment = dataLayer.GetUserRecurringPayment(user, id);
+                await dataLayer.DeleteAsync(recurringPayment);
+                logger.LogInformation("RecurringPayment {Id} deleted successfully by user {UserName}", id, user.UserName);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error occurred in RecurringPaymentsController.DeleteConfirmed for id {Id}, user {UserName}", id, User?.Identity?.Name ?? "unknown");
+                return View("Error");
+            }
         }
 
 
         public async Task<IActionResult> GenerateAllActiveRecurringPayments()
         {
-            var activeRecurringPayments = dataLayer.GetUserRecurringPayments(ApplicationUser)
-                .Where(rp => rp.IsActive);
-
-            var records = new List<Record>();
-
-            foreach(var recurringPayment in activeRecurringPayments)
+            try
             {
-                records.Add(await MapRecurringPaymentToRecordAsync(recurringPayment));
+                var user = ApplicationUser;
+                if (user == null)
+                {
+                    logger.LogError("ApplicationUser is null in RecurringPaymentsController.GenerateAllActiveRecurringPayments");
+                    return RedirectToAction("Login", "Account");
+                }
+
+                var activeRecurringPayments = dataLayer.GetUserRecurringPayments(user)
+                    .Where(rp => rp.IsActive);
+
+                var records = new List<Record>();
+
+                foreach(var recurringPayment in activeRecurringPayments)
+                {
+                    records.Add(await MapRecurringPaymentToRecordAsync(recurringPayment));
+                }
+
+                await dataLayer.AddRangeAsync(records.ToArray());
+                logger.LogInformation("Generated {Count} payments from active recurring payments for user {UserName}", records.Count, user.UserName);
+
+                return RedirectToAction(nameof(Index), "Records");
             }
-
-            await dataLayer.AddRangeAsync(records.ToArray());
-
-            return RedirectToAction(nameof(Index), "Records");
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error occurred in RecurringPaymentsController.GenerateAllActiveRecurringPayments for user {UserName}", User?.Identity?.Name ?? "unknown");
+                return View("Error");
+            }
         }
 
 
         public async Task<IActionResult> GeneratePayment(string id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    logger.LogWarning("GeneratePayment called with null id");
+                    return NotFound();
+                }
 
-            var recurringPayment = dataLayer.GetUserRecurringPayment(ApplicationUser, id);
-            if (recurringPayment == null)
+                var user = ApplicationUser;
+                if (user == null)
+                {
+                    logger.LogError("ApplicationUser is null in RecurringPaymentsController.GeneratePayment");
+                    return RedirectToAction("Login", "Account");
+                }
+
+                var recurringPayment = dataLayer.GetUserRecurringPayment(user, id);
+                if (recurringPayment == null)
+                {
+                    logger.LogWarning("RecurringPayment with id {Id} not found for payment generation", id);
+                    return NotFound();
+                }
+
+                var record = await MapRecurringPaymentToRecordAsync(recurringPayment);
+                await dataLayer.AddAsync(record);
+                logger.LogInformation("Payment generated from RecurringPayment {Id} for user {UserName}", id, user.UserName);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                logger.LogError(ex, "Error occurred in RecurringPaymentsController.GeneratePayment for id {Id}, user {UserName}", id, User?.Identity?.Name ?? "unknown");
+                return View("Error");
             }
-
-
-            var record = await MapRecurringPaymentToRecordAsync(recurringPayment);
-            await dataLayer.AddAsync(record);
-
-            return RedirectToAction(nameof(Index));
         }
 
         private async Task<Record> MapRecurringPaymentToRecordAsync(RecurringPayment recurringPayment)
