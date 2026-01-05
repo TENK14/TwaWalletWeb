@@ -20,9 +20,11 @@
 /* Responzivní úpravy pouze pro tuto stránku */
 @media (max-width: 767px) {
     /* Skrytí sloupců PaymentType a Tag na mobilu */
-    .records-table td:nth-child(6), /* Tag */
-    .records-table th:nth-child(6),
-    .records-table td:nth-child(7), /* Earnings */
+    /* Tag */
+    /*.records-table td:nth-child(6),*/ 
+    /*.records-table th:nth-child(6),*/
+    /* Earnings */
+    .records-table td:nth-child(7), 
     .records-table th:nth-child(7) {
         display: none;
     }
