@@ -6,6 +6,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/recurring-payments-index.css" asp-append-version="true" />
+}
+
 <h2>Recurring payments</h2>
 
 <p>
@@ -23,7 +27,7 @@
 </div>
 
 <div class="table-responsive">
-    <table class="table">
+<table class="table recurring-payments-table">
         <thead>
             <tr>
                 <th>
@@ -71,7 +75,7 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
+                <tr class="@(item.Earnings ? "earnings-true" : "earnings-false")">
                     <td>
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>

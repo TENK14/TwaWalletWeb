@@ -1,0 +1,66 @@
+﻿/* Obarvení řádků podle Earnings */
+.earnings-true {
+    border-left: 5px solid lightgreen;
+}
+
+.earnings-false {
+    border-left: 5px solid lightcoral;
+}
+
+/* Omezení šířky sloupce Description a zalamování textu */
+.recurring-payments-table td:nth-child(1),
+.recurring-payments-table th:nth-child(1) {
+    max-width: 250px;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+/* Responzivní úpravy pouze pro tuto stránku */
+@media (max-width: 767px) {
+/* Skrytí vybraných sloupců na mobilu */
+.recurring-payments-table td:nth-child(3), /* Earnings */
+.recurring-payments-table th:nth-child(3),
+.recurring-payments-table td:nth-child(4), /* Warranty */
+.recurring-payments-table th:nth-child(4),
+/*.recurring-payments-table td:nth-child(5),*/ /* Tag */
+/*.recurring-payments-table th:nth-child(5),*/
+.recurring-payments-table td:nth-child(6), /* DateCreated */
+.recurring-payments-table th:nth-child(6),
+.recurring-payments-table td:nth-child(7), /* LastUpdate */
+.recurring-payments-table th:nth-child(7),
+.recurring-payments-table td:nth-child(9), /* EndDate */
+.recurring-payments-table th:nth-child(9),
+/*.recurring-payments-table td:nth-child(11),*/ /* Interval */
+/*.recurring-payments-table th:nth-child(11),*/
+.recurring-payments-table td:nth-child(12), /* PaymentType */
+.recurring-payments-table th:nth-child(12) {
+    display: none;
+}
+
+    /* Zmenšení velikosti textu */
+    .recurring-payments-table {
+        font-size: 10px;
+        border-spacing: 0;
+    }
+
+        .recurring-payments-table td,
+        .recurring-payments-table th {
+            padding: 2px 1px !important;
+        }
+        
+    /* Description má mít normální zalamování i na mobilu - MUSÍ být za obecným pravidlem */
+    .recurring-payments-table td:nth-child(1),
+    .recurring-payments-table th:nth-child(1) {
+        max-width: 150px;
+        word-wrap: break-word;
+        white-space: normal !important;
+        padding: 2px 1px !important;
+    }
+}
+
+/* Responzivní wrapper pro horizontální scroll */
+.table-responsive-recurring-payments {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
