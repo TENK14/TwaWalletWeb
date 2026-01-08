@@ -13,10 +13,12 @@
 <h2>Recurring payments</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
-</p>
-<p>
-    <a asp-action="GenerateAllActiveRecurringPayments">Generate all active recurring payments</a>
+    <a asp-action="Create" class="btn btn-default btn-create-green" title="Create New">
+        <span class="glyphicon glyphicon-plus"></span>
+    </a>
+    <a asp-action="GenerateAllActiveRecurringPayments" class="btn btn-default" title="Generate all active recurring payments">
+        <span class="glyphicon glyphicon-refresh"></span>
+    </a>
 </p>
 
 <div>

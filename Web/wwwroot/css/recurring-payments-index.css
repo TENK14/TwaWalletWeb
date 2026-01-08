@@ -22,6 +22,11 @@
     min-width: 60px;
 }
 
+/* Zelená ikona pro Create (plus) */
+.btn-create-green .glyphicon-plus {
+    color: green;
+}
+
 /* Responzivní úpravy pouze pro tuto stránku */
 @media (max-width: 767px) {
 /* Skrytí vybraných sloupců na mobilu */
