@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -46,7 +46,7 @@
     <!-- End Google Tag Manager (noscript) -->
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container-fluid">  <!-- Změna z container na container-fluid -->
+        <div class="container-fluid">  <!-- Zmena z container na container-fluid -->
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -63,7 +63,7 @@
                     <li><a asp-area="" asp-controller="PaymentTypes" asp-action="Index">Payment types</a></li>
                     <li><a asp-area="" asp-controller="RecurringPayments" asp-action="Index">Recurring payments</a></li>
                     <li><a asp-area="" asp-controller="Summary" asp-action="Index">Summary</a></li>
-                    <li><a asp-area="" asp-controller="Overview" asp-action="Index">Overview</a></li>
+                    <li><a asp-area="" asp-controller="Report" asp-action="Index">Report</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
@@ -113,3 +113,5 @@
     gtag('config', 'G-RQ1GQQ404S');
 </script> 
 *@
+
+

@@ -1,12 +1,12 @@
-@model IEnumerable<TwaWallet.Web.Models.OverviewViewModels.OverviewVM>
+@model IEnumerable<TwaWallet.Web.Models.ReportViewModels.ReportVM>
 
 @{
-    ViewData["Title"] = "Overview";
+    ViewData["Title"] = "Report";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/overview-index.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/report-index.css" asp-append-version="true" />
 }
 
 <h4>Overview by Category</h4>
@@ -39,17 +39,17 @@
         </div>
 
         <div id="customPeriodInput" style="@(ViewBag.PeriodType == "Custom" ? "" : "display:none;")">
-            <label>Od:</label>
+            <label>From:</label>
             <input type="Date" name="dateFrom" value="@ViewBag.DateFrom?.ToString("yyyy-MM-dd")" class="form-control" style="display: inline-block; width: auto;" />
-            <label>Do:</label>
+            <label>To:</label>
             <input type="Date" name="dateTo" value="@ViewBag.DateTo?.ToString("yyyy-MM-dd")" class="form-control" style="display: inline-block; width: auto;" />
         </div>
 
         <br />
-        <input type="submit" value="Zobrazit" class="btn btn-primary" />
+        <input type="submit" value="Show" class="btn btn-primary" />
         
         <div style="margin-top: 10px;">
-            <strong>Období:</strong> @ViewBag.PeriodDescription
+            <strong>Period:</strong> @ViewBag.PeriodDescription
         </div>
     </div>
 </form>

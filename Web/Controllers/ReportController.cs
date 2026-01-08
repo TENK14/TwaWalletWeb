@@ -8,17 +8,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using TwaWallet.Model;
 using TwaWallet.Web.DataLayer;
-using TwaWallet.Web.Models.OverviewViewModels;
+using TwaWallet.Web.Models.ReportViewModels;
 
 namespace TwaWallet.Web.Controllers
 {
     [Authorize]
-    public class OverviewController : Controller
+    public class ReportController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IDataLayer dataLayer;
 
-        public OverviewController(
+        public ReportController(
             UserManager<ApplicationUser> userManager,
             IDataLayer dataLayer)
         {
@@ -102,7 +102,7 @@ namespace TwaWallet.Web.Controllers
 
             var groupedByCategory = list.GroupBy(r => r.CategoryId);
 
-            var result = new List<OverviewVM>();
+            var result = new List<ReportVM>();
 
             foreach (var group in groupedByCategory)
             {
@@ -110,7 +110,7 @@ namespace TwaWallet.Web.Controllers
                 var expenses = group.Where(r => !r.Earnings).Sum(r => Math.Abs(r.Cost));
                 var earnings = group.Where(r => r.Earnings).Sum(r => r.Cost);
 
-                result.Add(new OverviewVM
+                result.Add(new ReportVM
                 {
                     CategoryDescription = category?.Description ?? "Unknown",
                     Expenses = expenses,
@@ -125,3 +125,4 @@ namespace TwaWallet.Web.Controllers
         }
     }
 }
+

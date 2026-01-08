@@ -1,23 +1,24 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace TwaWallet.Web.Models.OverviewViewModels
+namespace TwaWallet.Web.Models.ReportViewModels
 {
-    public class OverviewVM
+    public class ReportVM
     {
-        [Display(Name = "Category")]
+        [Display(Name = "Kategorie")]
         public string CategoryDescription { get; set; }
 
-        [Display(Name = "Expenses")]
+        [Display(Name = "Výdaje")]
         [DisplayFormat(DataFormatString = "{0:C}")]
         public float Expenses { get; set; }
 
-        [Display(Name = "Earnings")]
+        [Display(Name = "Příjmy")]
         [DisplayFormat(DataFormatString = "{0:C}")]
         public float Earnings { get; set; }
 
-        [Display(Name = "Total")]
+        [Display(Name = "Celkem")]
         [DisplayFormat(DataFormatString = "{0:C}")]
         public float Total { get; set; }
     }
 }
+
 
