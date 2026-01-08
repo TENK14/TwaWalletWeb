@@ -11,12 +11,6 @@
 
 <h2>Records</h2>
 
-<p>
-    <div >
-        <a asp-action="Create">Create New</a>
-    </div>
-</p>
-
 <span>
     <form asp-action="Index" method="get">
         <div class="form-actions no-color">
@@ -37,6 +31,9 @@
             <span>Earnings: </span>
             <input type="checkbox" name="Earnings" value="true" checked="@ViewBag.Earnings" />
             <input type="submit" value="Search" class="btn btn-default" />
+            <a asp-action="Create" class="btn btn-default btn-create-green" title="Create New">
+                <span class="glyphicon glyphicon-plus"></span>
+            </a>
             <br />
         </div>
     </form>
