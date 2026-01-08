@@ -68,8 +68,8 @@
     </div>
 </form>
 
-<div style="margin: 20px 0;">
-    <canvas id="overviewChart" style="max-height: 400px;"></canvas>
+<div style="margin: 20px 0; height: 500px;">
+    <canvas id="overviewChart"></canvas>
 </div>
 
 <table class="table table-striped">
@@ -165,9 +165,9 @@
         // Chart data
         var chartData = {
             labels: [@Html.Raw(string.Join(", ", Model.Select(m => $"'{m.Period}'")))],
-            expenses: [@Html.Raw(string.Join(", ", Model.Select(m => m.Expenses)))],
-            earnings: [@Html.Raw(string.Join(", ", Model.Select(m => m.Earnings)))],
-            total: [@Html.Raw(string.Join(", ", Model.Select(m => m.Total)))]
+            expenses: [@Html.Raw(string.Join(", ", Model.Select(m => m.Expenses.ToString(System.Globalization.CultureInfo.InvariantCulture))))],
+            earnings: [@Html.Raw(string.Join(", ", Model.Select(m => m.Earnings.ToString(System.Globalization.CultureInfo.InvariantCulture))))],
+            total: [@Html.Raw(string.Join(", ", Model.Select(m => m.Total.ToString(System.Globalization.CultureInfo.InvariantCulture))))]
         };
 
         // Create the chart
@@ -200,7 +200,7 @@
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {
                         position: 'top',
