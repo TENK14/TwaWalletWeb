@@ -23,14 +23,6 @@
             </select>
         </div> *@
 
-        <div class="form-group">
-            <label>Aggregation:</label>
-            <select name="aggregationType" class="form-control" style="display: inline-block; width: auto;">
-                <option value="Month" selected="@(ViewBag.AggregationType == "Month" ? "selected" : null)">By Month</option>
-                <option value="Year" selected="@(ViewBag.AggregationType == "Year" ? "selected" : null)">By Year</option>
-            </select>
-        </div>
-
         @* <div id="yearInput" style="@(ViewBag.PeriodType == "Year" || ViewBag.PeriodType == "Month" ? "" : "display:none;")">
             <label>Year:</label>
             <input type="number" name="year" value="@ViewBag.Year" min="2000" max="2100" class="form-control" style="display: inline-block; width: auto;" />
@@ -61,6 +53,13 @@
         </div>
 
         <br />
+        <div class="form-group">
+            <label>Aggregation:</label>
+            <select name="aggregationType" class="form-control" style="display: inline-block; width: auto;">
+                <option value="Month" selected="@(ViewBag.AggregationType == "Month" ? "selected" : null)">By Month</option>
+                <option value="Year" selected="@(ViewBag.AggregationType == "Year" ? "selected" : null)">By Year</option>
+            </select>
+        </div>
         <input type="submit" value="Show" class="btn btn-primary" />
         
         @* <div style="margin-top: 10px;">
