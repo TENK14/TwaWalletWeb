@@ -15,6 +15,12 @@
     white-space: normal;
 }
 
+/* Sloupec s akcemi - zajistit, aby ikonky byly na jednom řádku */
+.records-table td:last-child,
+.records-table th:last-child {
+    white-space: nowrap;
+    min-width: 50px;
+}
 
 
 /* Responzivní úpravy pouze pro tuto stránku */
