@@ -1,0 +1,143 @@
+@model IEnumerable<TwaWallet.Web.Models.OverviewViewModels.OverviewVM>
+
+@{
+    ViewData["Title"] = "Overview";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/overview-index.css" asp-append-version="true" />
+}
+
+<h4>Overview by Category</h4>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <div class="form-group">
+            <label>Period Type:</label>
+            <select name="periodType" id="periodType" class="form-control" style="display: inline-block; width: auto;" onchange="togglePeriodInputs()">
+                <option value="YTD" selected="@(ViewBag.PeriodType == "YTD" ? "selected" : null)">Year to Date (YTD)</option>
+                <option value="Year" selected="@(ViewBag.PeriodType == "Year" ? "selected" : null)">Specific Year</option>
+                <option value="Month" selected="@(ViewBag.PeriodType == "Month" ? "selected" : null)">Specific Month</option>
+                <option value="Custom" selected="@(ViewBag.PeriodType == "Custom" ? "selected" : null)">Custom Period</option>
+            </select>
+        </div>
+
+        <div id="yearInput" style="@(ViewBag.PeriodType == "Year" || ViewBag.PeriodType == "Month" ? "" : "display:none;")">
+            <label>Year:</label>
+            <input type="number" name="year" value="@ViewBag.Year" min="2000" max="2100" class="form-control" style="display: inline-block; width: auto;" />
+        </div>
+
+        <div id="monthInput" style="@(ViewBag.PeriodType == "Month" ? "" : "display:none;")">
+            <label>Month:</label>
+            <select name="month" class="form-control" style="display: inline-block; width: auto;">
+                @for (int i = 1; i <= 12; i++)
+                {
+                    <option value="@i" selected="@(ViewBag.Month == i ? "selected" : null)">@i</option>
+                }
+            </select>
+        </div>
+
+        <div id="customPeriodInput" style="@(ViewBag.PeriodType == "Custom" ? "" : "display:none;")">
+            <label>Od:</label>
+            <input type="Date" name="dateFrom" value="@ViewBag.DateFrom?.ToString("yyyy-MM-dd")" class="form-control" style="display: inline-block; width: auto;" />
+            <label>Do:</label>
+            <input type="Date" name="dateTo" value="@ViewBag.DateTo?.ToString("yyyy-MM-dd")" class="form-control" style="display: inline-block; width: auto;" />
+        </div>
+
+        <br />
+        <input type="submit" value="Zobrazit" class="btn btn-primary" />
+        
+        <div style="margin-top: 10px;">
+            <strong>Období:</strong> @ViewBag.PeriodDescription
+        </div>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryDescription)
+            </th>
+            <th class="align-right">
+                @Html.DisplayNameFor(model => model.Expenses)
+            </th>
+            <th class="align-right">
+                @Html.DisplayNameFor(model => model.Earnings)
+            </th>
+            <th class="align-right">
+                @Html.DisplayNameFor(model => model.Total)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CategoryDescription)
+                    </td>
+                    <td class="align-right">
+                        @string.Format("{0:C}", item.Expenses)
+                    </td>
+                    <td class="align-right">
+                        @string.Format("{0:C}", item.Earnings)
+                    </td>
+                    <td class="align-right">
+                        @string.Format("{0:C}", item.Total)
+                    </td>
+                </tr>
+            }
+            <tr style="font-weight:bold; border-top: 2px solid #000;">
+                <td>
+                    Celkem:
+                </td>
+                <td class="align-right">
+                    @string.Format("{0:C}", Model.Sum(m => m.Expenses))
+                </td>
+                <td class="align-right">
+                    @string.Format("{0:C}", Model.Sum(m => m.Earnings))
+                </td>
+                <td class="align-right">
+                    @string.Format("{0:C}", Model.Sum(m => m.Total))
+                </td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" style="text-align: center;">
+                    Žádné záznamy pro vybrané období.
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        function togglePeriodInputs() {
+            var periodType = document.getElementById('periodType').value;
+            var yearInput = document.getElementById('yearInput');
+            var monthInput = document.getElementById('monthInput');
+            var customPeriodInput = document.getElementById('customPeriodInput');
+
+            yearInput.style.display = 'none';
+            monthInput.style.display = 'none';
+            customPeriodInput.style.display = 'none';
+
+            if (periodType === 'Year' || periodType === 'Month') {
+                yearInput.style.display = 'block';
+            }
+            if (periodType === 'Month') {
+                monthInput.style.display = 'block';
+            }
+            if (periodType === 'Custom') {
+                customPeriodInput.style.display = 'block';
+            }
+        }
+    </script>
+}
