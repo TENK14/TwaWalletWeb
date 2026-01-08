@@ -1,0 +1,22 @@
+/* Responzivní úpravy pouze pro tuto stránku */
+@media (max-width: 767px) {
+    /* Styl pro date inputs - aby byly na jednom ?ádku */
+    .form-actions span,
+    .form-actions input[type="Date"] {
+        display: inline-block;
+        vertical-align: middle;
+        horizontal-align: middle;
+        font-size: 10px;
+    }
+
+    /* Zmenšení velikosti textu */
+    .table {
+        font-size: 10px;
+        border-spacing: 0;
+    }
+
+        .table td,
+        .table th {
+            padding: 2px 1px !important;
+        }
+}
