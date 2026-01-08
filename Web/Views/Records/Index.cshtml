@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<TwaWallet.Model.Record>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Records";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -14,7 +14,7 @@
 <span>
     <form asp-action="Index" method="get">
         <div class="form-actions no-color">
-            <span @*class="visible-lg-inline-block" *@>Hledej: </span>
+            <span @*class="visible-lg-inline-block" *@>Search: </span>
             <input @*class="visible-lg-inline-block" *@ type="text" name="SearchString" value="@ViewBag.CurrentFilter" />
             @*<div class="form-group">
                 <label asp-for="PaymentTypeId" class="control-label">Payment type</label>
